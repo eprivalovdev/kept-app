@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Kept Support and FAQ</title>
+<meta name="description" content="Help for Kept: automatic logging with the Wallet shortcut, reminders, receipt scanning, budgets, iCloud sync, purchases and your data.">
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html"><img src="icon.png" alt="" width="36" height="36">Kept</a>
+<nav aria-label="Pages"><ul>
+<li><a href="support.html" aria-current="page">Support</a></li>
+<li><a href="privacy.html">Privacy</a></li>
+<li><a href="terms.html">Terms</a></li>
+</ul></nav>
+</div></header>
+<main id="main"><div class="wrap">
+<h1>Support</h1>
+<p>Something not working? Start here. If you are still stuck, email <a href="mailto:eprivalovdev@gmail.com">eprivalovdev@gmail.com</a>. Tell me your iPhone model, iOS version and what you see. You can also use Settings &gt; Contact support in Kept, which prepares the email for you.</p>
+
+<h2>Automatic logging</h2>
+<details><summary>How do I set up automatic logging on iOS 27?</summary>
+<p>In Kept, open Settings &gt; Automatic logging (the screen is called Apple Pay setup) and follow the three steps. You do this once.</p>
+<ol>
+<li><strong>Add the shortcut.</strong> Tap Add Shortcut. The shortcut already starts when Wallet sends a payment notification.</li>
+<li><strong>Allow it to run.</strong> Run the shortcut once and tap <strong>Allow</strong> when iOS asks. This test run logs no payment.</li>
+<li><strong>Turn on Automation.</strong> Open the shortcut, tap Edit, then the arrow on the trigger. Switch <strong>Automation</strong> on and leave <strong>Notify</strong> off, so iOS does not announce each run on top of Kept&rsquo;s own notification.</li>
+</ol>
+<p>Use the <strong>Test it</strong> button in Kept to check the whole path without paying.</p></details>
+<details><summary>How do I set it up on iOS 26?</summary>
+<p>On iOS 26 the trigger is a tap on a reader instead of a Wallet notification. Kept&rsquo;s setup guide shows the steps for iOS 26. In short, in the Shortcuts app you make a shortcut that starts when a card is tapped, choose your cards, and add Kept&rsquo;s &ldquo;Log Apple Pay Payment&rdquo; action with Amount, Merchant and Card filled in from the trigger. Turn Notify off. Apple does not let an app create automations for you, so this takes a few minutes, once.</p></details>
+<details><summary>My bank does not send Wallet notifications. What now?</summary>
+<p>Use the tap-to-pay route described for iOS 26. It works without a bank notification, and Kept&rsquo;s setup guide covers it. If both routes are on, Kept merges them so one payment is not logged twice. If neither works for your card, add expenses with quick add from Control Center, the Action Button, Siri or the Apple Watch app.</p></details>
+<details><summary>Why did a payment not log?</summary>
+<ul>
+<li>The automation, or its Allow permission, is off. Open Settings &gt; Automatic logging and check the run log.</li>
+<li>Your bank sent no Wallet notification, or sent one without an amount.</li>
+<li>The notification was not a purchase. Kept skips refunds, declined payments, balance alerts and offers on purpose.</li>
+<li>On the tap route, the payment was made with a card that is not in the automation.</li>
+<li>Kept treated an exact repeat as a duplicate. Two real payments with the same amount, card and merchant at the same moment can merge.</li>
+</ul>
+<p>Automatic logging relies on Shortcuts and Wallet, which Kept does not control, so a payment can occasionally be missed. Add it by hand with the plus button. It takes a few seconds. If it keeps happening, open the run log on the Automatic logging screen, tap Copy log and email it to me. The log has times and results, not your payment details.</p></details>
+<details><summary>I get a notification for every run on top of Kept&rsquo;s. Why?</summary>
+<p>The shortcut&rsquo;s Notify switch is on. Turn it off in the automation&rsquo;s settings in Shortcuts.</p></details>
+<details><summary>What does &ldquo;Needs a category&rdquo; mean?</summary>
+<p>The payment was saved, but you have not filed it yet. Kept asks for a category right after the payment, with a picker from the shortcut and a notification with category buttons. If you ignore both, the payment waits in the Log tab. Tap it there, or open the batch tray to file several at once.</p></details>
+<details><summary>Can I hide amounts on the lock screen?</summary>
+<p>Yes. Turn on Settings &gt; Hide amounts on lock screen. Kept then shows &ldquo;Payment logged&rdquo; instead of the price.</p></details>
+
+<h2>Reminders</h2>
+<details><summary>What reminders does Kept send?</summary>
+<p>Kept can tell you about three things. All of them are local notifications made on your iPhone.</p>
+<ul>
+<li><strong>Upcoming charges.</strong> A heads-up before a recurring expense, by default one day before around 9:00. In the notification you can tap &ldquo;I cancelled it&rdquo; to stop that recurring payment, or &ldquo;Skip this time&rdquo; to skip only that one. Doing nothing changes nothing.</li>
+<li><strong>Budget alerts.</strong> When a payment takes a budget past 80% and past 100%. Alerts for category budgets are part of Kept Pro.</li>
+<li><strong>Automatic logging.</strong> If nothing has been logged automatically for a while, or several payments still wait for a category.</li>
+</ul>
+<p>To keep this calm, Kept sends at most one scheduled reminder a day and stays quiet from 21:00 to 9:00. A budget alert right after you pay is the exception.</p></details>
+<details><summary>How do I turn reminders off?</summary>
+<p>Open Settings &gt; Notifications and switch off the reminders you do not want. For one recurring payment, open it in Recurring and change &ldquo;Remind me&rdquo;. For one budget, use the alert switch in the budget editor. You can also turn off all of Kept&rsquo;s notifications in iOS Settings, but then payment notifications stop too.</p></details>
+
+<h2>Receipt scanning</h2>
+<details><summary>How do I scan a receipt?</summary>
+<p>Open the Add screen and tap the receipt button next to the amount. Choose Scan receipt to use the camera, or Choose photo to use a picture you already have. Kept reads the merchant, date, total and items, and pre-fills the expense. Anything it is unsure about is marked &ldquo;Check&rdquo;. Nothing is saved until you save it. Free accounts get 3 scans. Kept Pro has no limit.</p></details>
+<details><summary>Tips for a good scan</summary>
+<ul>
+<li>Lay the receipt flat in good light and fill the frame.</li>
+<li>Keep the whole receipt in view, especially the total line.</li>
+<li>Hold still until the image is sharp. If the photo is too blurry, Kept asks you to retake it.</li>
+<li>Check the amount before you save, most of all on faded or crumpled receipts.</li>
+</ul></details>
+<details><summary>Where do my receipt photos go?</summary>
+<p>The photo is read on your iPhone and stored on your iPhone with the expense. Kept does not upload it, and it is not part of iCloud sync. Remove a receipt from the expense&rsquo;s detail screen, or delete the expense, to delete the photo.</p></details>
+
+<h2>Budgets</h2>
+<details><summary>How do budgets work?</summary>
+<p>Open the Budgets tab. An overall monthly budget is free. Budgets for single categories are part of Kept Pro. Kept shows what is left and, where it applies, a daily allowance. Unused money can carry over to the next period. To start your month on payday, change Settings &gt; Month starts on day.</p></details>
+<details><summary>Why is a payment missing from my totals?</summary>
+<p>Kept adds up payments in the currency set in Settings &gt; Currency. A payment in another currency shows in your log but is not counted in totals, and Kept does not convert currencies.</p></details>
+
+<h2>Splitting with friends</h2>
+<details><summary>How does splitting work?</summary>
+<p>Splitting is part of Kept Pro. When you add a payment, split it between you and other people. Kept tracks what each person owes you and what they paid back. Your Insights and budgets count only your share. People and saved groups live in Settings &gt; People &amp; groups. The tap on &ldquo;Remind&rdquo; writes a message and opens the iOS share sheet. Kept sends nothing by itself, and the people you add never need Kept.</p></details>
+
+<h2>Purchases</h2>
+<details><summary>How do I restore Kept Pro?</summary>
+<p>Open Settings &gt; Restore Purchases in Kept, or tap Restore on the paywall. Use the same Apple Account you bought with. If a lifetime purchase came through Family Sharing, it may take a minute or two to appear.</p></details>
+<details><summary>How do I cancel my subscription?</summary>
+<p>On your iPhone: Settings &gt; your name &gt; Subscriptions &gt; Kept. Cancel at least 24 hours before renewal. Deleting the app does not cancel it. See the <a href="terms.html">Terms</a> for details.</p></details>
+<details><summary>Can I get a refund?</summary>
+<p>Apple handles refunds. Go to <a href="https://reportaproblem.apple.com/">reportaproblem.apple.com</a>.</p></details>
+
+<h2>Data and sync</h2>
+<details><summary>How does iCloud sync work?</summary>
+<p>iCloud sync is a Kept Pro feature and is optional. Turn it on in Settings &gt; iCloud sync, then reopen Kept to apply the change. Your data goes to your private iCloud database through Apple and shows up on your other devices signed in to the same Apple Account. You need to be signed in to iCloud. The first sync can take a few minutes. Receipt photos stay on the iPhone where you scanned them.</p></details>
+<details><summary>Does Kept work without iCloud?</summary>
+<p>Yes. Everything works on your device alone. The Apple Watch app syncs over the watch connection and does not need iCloud.</p></details>
+<details><summary>How do I export my data?</summary>
+<p>CSV export is a Kept Pro feature: Settings &gt; Export CSV. CSV import is free: Settings &gt; Import CSV. Importing the same file twice is safe, because Kept skips what it already has.</p></details>
+<details><summary>How do I delete my data?</summary>
+<p>Delete a transaction, budget, recurring payment, split or group inside Kept (swipe the row or open its detail). Categories are archived, and past transactions keep them. Deleting the app removes all local data from that iPhone. If you used iCloud sync, also remove Kept&rsquo;s data in Settings &gt; your name &gt; iCloud &gt; Manage Storage.</p></details>
+<details><summary>What data does Kept collect?</summary>
+<p>None. See the <a href="privacy.html">Privacy Policy</a>.</p></details>
+
+<h2>Contact</h2>
+<p><a href="mailto:eprivalovdev@gmail.com">eprivalovdev@gmail.com</a></p>
+</div></main>
+<footer><div class="wrap">
+<p>Kept is made by Egor Privalov. Questions: <a href="mailto:eprivalovdev@gmail.com">eprivalovdev@gmail.com</a></p>
+<p><a href="index.html">Home</a> · <a href="support.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
+<p>Apple Pay, Wallet, Shortcuts, Apple Watch, iCloud and App Store are trademarks of Apple Inc. Kept is not affiliated with or endorsed by Apple.</p>
+</div></footer>
+</body>
+</html>
