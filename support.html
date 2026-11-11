@@ -4,26 +4,61 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#080A0B" media="(prefers-color-scheme: dark)">
 <title>Kept Support and FAQ</title>
 <meta name="description" content="Help for Kept: automatic logging with the Wallet shortcut, reminders, receipt scanning, budgets, iCloud sync, purchases and your data.">
-<link rel="icon" href="icon.png">
+<link rel="canonical" href="https://eprivalovdev.github.io/kept-app/support.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kept">
+<meta property="og:title" content="Kept Support and FAQ">
+<meta property="og:description" content="Help for Kept: automatic logging with the Wallet shortcut, reminders, receipt scanning, budgets, iCloud sync, purchases and your data.">
+<meta property="og:url" content="https://eprivalovdev.github.io/kept-app/support.html">
+<meta property="og:image" content="https://eprivalovdev.github.io/kept-app/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Kept app icon and the words Pay. Tap. Kept. on a dark background with floating category chips.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/icon/favicon-rounded-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="img/icon/favicon-rounded-64.png" sizes="64x64" type="image/png">
+<link rel="apple-touch-icon" href="img/icon/apple-touch-icon.png">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="doc-page">
 <a class="skip" href="#main">Skip to content</a>
-<header class="site"><div class="wrap">
-<a class="brand" href="index.html"><img src="icon.png" alt="" width="36" height="36">Kept</a>
-<nav aria-label="Pages"><ul>
+<header class="site site-page">
+  <div class="wrap site-row">
+    <a class="brand" href="index.html"><picture><source srcset="img/icon/icon-dark-rounded-64.png" media="(prefers-color-scheme: dark)"><img src="img/icon/icon-rounded-64.png" alt="" width="32" height="32"></picture>Kept</a>
+    <nav aria-label="Pages"><ul>
 <li><a href="support.html" aria-current="page">Support</a></li>
 <li><a href="privacy.html">Privacy</a></li>
 <li><a href="terms.html">Terms</a></li>
 </ul></nav>
-</div></header>
-<main id="main"><div class="wrap">
-<h1>Support</h1>
-<p>Something not working? Start here. If you are still stuck, email <a href="mailto:eprivalovdev@gmail.com">eprivalovdev@gmail.com</a>. Tell me your iPhone model, iOS version and what you see. You can also use Settings &gt; Contact support in Kept, which prepares the email for you.</p>
+  </div>
+</header>
+<main id="main">
+<div class="doc-head">
+  <div class="wrap">
+    <div class="doc-dots" aria-hidden="true"><i style="--c:#A2845E"></i><i style="--c:#34C759"></i><i style="--c:#FF863E"></i></div>
+    <p class="eyebrow">Help</p>
+    <h1>Support</h1>
+<p class="doc-intro">Something not working? Start here. If you are still stuck, email <a href="mailto:eprivalovdev@gmail.com">eprivalovdev@gmail.com</a>. Tell me your iPhone model, iOS version and what you see. You can also use Settings &gt; Contact support in Kept, which prepares the email for you.</p>
+  </div>
+</div>
+<div class="wrap doc-body">
+<nav class="toc" aria-label="On this page"><p>On this page</p><ol>
+<li><a href="#automatic-logging">Automatic logging</a></li>
+<li><a href="#reminders">Reminders</a></li>
+<li><a href="#receipt-scanning">Receipt scanning</a></li>
+<li><a href="#budgets">Budgets</a></li>
+<li><a href="#splitting-with-friends">Splitting with friends</a></li>
+<li><a href="#purchases">Purchases</a></li>
+<li><a href="#data-and-sync">Data and sync</a></li>
+<li><a href="#contact">Contact</a></li>
+</ol></nav>
+<article class="doc">
 
-<h2>Automatic logging</h2>
+<h2 id="automatic-logging">Automatic logging</h2>
 <details><summary>How do I set up automatic logging on iOS 27?</summary>
 <p>In Kept, open Settings &gt; Automatic logging (the screen is called Apple Pay setup) and follow the three steps. You do this once.</p>
 <ol>
@@ -52,7 +87,7 @@
 <details><summary>Can I hide amounts on the lock screen?</summary>
 <p>Yes. Turn on Settings &gt; Hide amounts on lock screen. Kept then shows &ldquo;Payment logged&rdquo; instead of the price.</p></details>
 
-<h2>Reminders</h2>
+<h2 id="reminders">Reminders</h2>
 <details><summary>What reminders does Kept send?</summary>
 <p>Kept can tell you about three things. All of them are local notifications made on your iPhone.</p>
 <ul>
@@ -64,7 +99,7 @@
 <details><summary>How do I turn reminders off?</summary>
 <p>Open Settings &gt; Notifications and switch off the reminders you do not want. For one recurring payment, open it in Recurring and change &ldquo;Remind me&rdquo;. For one budget, use the alert switch in the budget editor. You can also turn off all of Kept&rsquo;s notifications in iOS Settings, but then payment notifications stop too.</p></details>
 
-<h2>Receipt scanning</h2>
+<h2 id="receipt-scanning">Receipt scanning</h2>
 <details><summary>How do I scan a receipt?</summary>
 <p>Open the Add screen and tap the receipt button next to the amount. Choose Scan receipt to use the camera, or Choose photo to use a picture you already have. Kept reads the merchant, date, total and items, and pre-fills the expense. Anything it is unsure about is marked &ldquo;Check&rdquo;. Nothing is saved until you save it. Free accounts get 3 scans. Kept Pro has no limit.</p></details>
 <details><summary>Tips for a good scan</summary>
@@ -77,17 +112,17 @@
 <details><summary>Where do my receipt photos go?</summary>
 <p>The photo is read on your iPhone and stored on your iPhone with the expense. Kept does not upload it, and it is not part of iCloud sync. Remove a receipt from the expense&rsquo;s detail screen, or delete the expense, to delete the photo.</p></details>
 
-<h2>Budgets</h2>
+<h2 id="budgets">Budgets</h2>
 <details><summary>How do budgets work?</summary>
 <p>Open the Budgets tab. An overall monthly budget is free. Budgets for single categories are part of Kept Pro. Kept shows what is left and, where it applies, a daily allowance. Unused money can carry over to the next period. To start your month on payday, change Settings &gt; Month starts on day.</p></details>
 <details><summary>Why is a payment missing from my totals?</summary>
 <p>Kept adds up payments in the currency set in Settings &gt; Currency. A payment in another currency shows in your log but is not counted in totals, and Kept does not convert currencies.</p></details>
 
-<h2>Splitting with friends</h2>
+<h2 id="splitting-with-friends">Splitting with friends</h2>
 <details><summary>How does splitting work?</summary>
 <p>Splitting is part of Kept Pro. When you add a payment, split it between you and other people. Kept tracks what each person owes you and what they paid back. Your Insights and budgets count only your share. People and saved groups live in Settings &gt; People &amp; groups. The tap on &ldquo;Remind&rdquo; writes a message and opens the iOS share sheet. Kept sends nothing by itself, and the people you add never need Kept.</p></details>
 
-<h2>Purchases</h2>
+<h2 id="purchases">Purchases</h2>
 <details><summary>How do I restore Kept Pro?</summary>
 <p>Open Settings &gt; Restore Purchases in Kept, or tap Restore on the paywall. Use the same Apple Account you bought with. If a lifetime purchase came through Family Sharing, it may take a minute or two to appear.</p></details>
 <details><summary>How do I cancel my subscription?</summary>
@@ -95,7 +130,7 @@
 <details><summary>Can I get a refund?</summary>
 <p>Apple handles refunds. Go to <a href="https://reportaproblem.apple.com/">reportaproblem.apple.com</a>.</p></details>
 
-<h2>Data and sync</h2>
+<h2 id="data-and-sync">Data and sync</h2>
 <details><summary>How does iCloud sync work?</summary>
 <p>iCloud sync is a Kept Pro feature and is optional. Turn it on in Settings &gt; iCloud sync, then reopen Kept to apply the change. Your data goes to your private iCloud database through Apple and shows up on your other devices signed in to the same Apple Account. You need to be signed in to iCloud. The first sync can take a few minutes. Receipt photos stay on the iPhone where you scanned them.</p></details>
 <details><summary>Does Kept work without iCloud?</summary>
@@ -107,13 +142,19 @@
 <details><summary>What data does Kept collect?</summary>
 <p>None. See the <a href="privacy.html">Privacy Policy</a>.</p></details>
 
-<h2>Contact</h2>
+<section class="doc-contact" aria-labelledby="contact">
+<h2 id="contact">Contact</h2>
 <p><a href="mailto:eprivalovdev@gmail.com">eprivalovdev@gmail.com</a></p>
-</div></main>
-<footer><div class="wrap">
-<p>Kept is made by Egor Privalov. Questions: <a href="mailto:eprivalovdev@gmail.com">eprivalovdev@gmail.com</a></p>
-<p><a href="index.html">Home</a> · <a href="support.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
-<p>Apple Pay, Wallet, Shortcuts, Apple Watch, iCloud and App Store are trademarks of Apple Inc. Kept is not affiliated with or endorsed by Apple.</p>
-</div></footer>
+</section>
+</article>
+</div>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <p>Kept is made by Egor Privalov. Questions: <a href="mailto:eprivalovdev@gmail.com">eprivalovdev@gmail.com</a></p>
+    <p class="foot-links"><a href="index.html">Home</a> · <a href="support.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
+    <p class="tm">Apple, Apple Pay, Apple Card, Apple Watch, iPhone, Siri, Face ID, Wallet, Shortcuts, iCloud, CloudKit and Apple Intelligence are trademarks of Apple Inc. App Store is a service mark of Apple Inc. Kept is not affiliated with or endorsed by Apple.</p>
+  </div>
+</footer>
 </body>
 </html>

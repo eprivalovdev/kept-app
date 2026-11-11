@@ -2,56 +2,534 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>Kept: Expense Tracker & Budget</title>
+<meta name="theme-color" content="#080C0F">
+<title>Kept: Expense Tracker &amp; Budget</title>
 <meta name="description" content="Pay with your iPhone, tap a category, and the expense is logged. Budgets, reminders, receipt scanning, widgets and Apple Watch. No account, no bank login, no ads.">
-<link rel="icon" href="icon.png">
+<link rel="canonical" href="https://eprivalovdev.github.io/kept-app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kept">
+<meta property="og:title" content="Kept: Expense Tracker &amp; Budget">
+<meta property="og:description" content="Pay. Tap. Kept. Your Apple Pay payments log themselves. You just pick the category.">
+<meta property="og:url" content="https://eprivalovdev.github.io/kept-app/">
+<meta property="og:image" content="https://eprivalovdev.github.io/kept-app/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Kept app icon and the words Pay. Tap. Kept. on a dark background with floating category chips.">
+<meta name="twitter:card" content="summary_large_image">
+<!-- TODO (release, owner): Smart App Banner <meta name="apple-itunes-app" content="app-id=…"> once the app id exists. -->
+<link rel="icon" href="img/icon/favicon-rounded-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="img/icon/favicon-rounded-64.png" sizes="64x64" type="image/png">
+<link rel="apple-touch-icon" href="img/icon/apple-touch-icon.png">
+<link rel="preload" as="image" href="img/chips/chip-hero-coffee.avif" type="image/avif">
 <link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="site.js" defer></script>
 </head>
-<body>
+<body class="home">
 <a class="skip" href="#main">Skip to content</a>
-<header class="site"><div class="wrap">
-<a class="brand" href="index.html"><img src="icon.png" alt="" width="36" height="36">Kept</a>
-<nav aria-label="Pages"><ul>
-<li><a href="support.html">Support</a></li>
-<li><a href="privacy.html">Privacy</a></li>
-<li><a href="terms.html">Terms</a></li>
-</ul></nav>
-</div></header>
-<main id="main"><div class="wrap">
-<section class="hero">
-<img src="icon.png" alt="Kept app icon" width="120" height="120">
-<h1>Spend, kept.</h1>
-<p class="lead">Pay with your iPhone, tap a category, and the expense is in your log. No account, no bank login, no ads.</p>
-<!-- TODO: replace the href with the real App Store link once the app is live -->
-<p><a class="badge" href="https://apps.apple.com/">Download on the App Store</a></p>
-<p class="muted">iPhone with iOS 26 or later. Apple Watch app included.</p>
+
+<!-- Floating section bar (900 px and up): appears once the hero has scrolled away. Echoes the app's floating tab bar. -->
+<nav class="fbar" aria-label="Sections" data-fbar>
+  <a class="fbar-brand" href="#top"><picture><source srcset="img/icon/icon-dark-rounded-64.png" media="(prefers-color-scheme: dark)"><img src="img/icon/icon-rounded-64.png" alt="" width="28" height="28"></picture>Kept</a>
+  <div class="fbar-links">
+    <span class="fbar-pill" aria-hidden="true"></span>
+    <a href="#how" data-spy="how">How it works</a>
+    <a href="#features" data-spy="features">Features</a>
+    <a href="#privacy" data-spy="privacy">Privacy</a>
+  </div>
+  <!-- TODO: replace the href with the real App Store link once the app is live -->
+  <a class="fbar-cta" href="https://apps.apple.com/">Get Kept</a>
+</nav>
+
+<header class="site site-over" id="top">
+  <div class="wrap site-row">
+    <a class="brand" href="index.html"><picture><source srcset="img/icon/icon-dark-rounded-64.png" media="(prefers-color-scheme: dark)"><img src="img/icon/icon-rounded-64.png" alt="" width="32" height="32"></picture>Kept</a>
+    <nav aria-label="Pages">
+      <ul>
+        <li><a href="support.html">Support</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO: the headline morphs on its own loop, the core loop plays live, the chip field answers the pointer ============ -->
+<section class="hero" aria-labelledby="hero-title" data-hero>
+  <div class="glow" aria-hidden="true"></div>
+  <!-- Kept's onboarding backdrop. Never takes a click: the hero listens, the field only draws. -->
+  <div class="field field-hero" aria-hidden="true" data-field="hero"><div class="field-x" data-field-mask><div class="field-y" data-field-x></div></div></div>
+
+  <div class="wrap hero-grid">
+    <div class="hero-head">
+      <p class="eyebrow eyebrow-dark">Expense tracker for iPhone</p>
+      <div class="hl-wrap" data-hl-wrap>
+        <!-- One word morphs letter by letter on its own clock: coffee, groceries, rent, takeout, flights, gifts, then the app icon and "spending" for a long hold, and round again. Screen readers, no-JS and Reduce Motion get "Your spending, kept." -->
+        <h1 id="hero-title" class="hl">
+          <span class="vh">Your spending, kept.</span>
+          <span class="hl-vis" aria-hidden="true">
+            <span class="hl-row hl-your">Your </span><span class="hl-row hl-wordline"><span class="hl-disc" data-disc>
+                <picture class="d" data-key="coffee"><source srcset="img/chips/chip-hero-coffee.avif" type="image/avif"><img src="img/chips/chip-hero-coffee.png" alt="" width="236" height="236"></picture>
+                <picture class="d" data-key="groceries"><source srcset="img/chips/chip-hero-groceries.avif" type="image/avif"><img src="img/chips/chip-hero-groceries.png" alt="" width="236" height="236" fetchpriority="low"></picture>
+                <picture class="d" data-key="rent"><source srcset="img/chips/chip-hero-home.avif" type="image/avif"><img src="img/chips/chip-hero-home.png" alt="" width="236" height="236" fetchpriority="low"></picture>
+                <picture class="d" data-key="takeout"><source srcset="img/chips/chip-hero-dining.avif" type="image/avif"><img src="img/chips/chip-hero-dining.png" alt="" width="236" height="236" fetchpriority="low"></picture>
+                <picture class="d" data-key="flights"><source srcset="img/chips/chip-hero-travel.avif" type="image/avif"><img src="img/chips/chip-hero-travel.png" alt="" width="236" height="236" fetchpriority="low"></picture>
+                <picture class="d" data-key="gifts"><source srcset="img/chips/chip-hero-gifts.avif" type="image/avif"><img src="img/chips/chip-hero-gifts.png" alt="" width="236" height="236" fetchpriority="low"></picture>
+                <picture class="d d-icon on" data-key="spending">
+                  <source srcset="img/icon/icon-dark-rounded-256.avif" type="image/avif" media="(prefers-color-scheme: dark)">
+                  <source srcset="img/icon/icon-dark-rounded-256.png" media="(prefers-color-scheme: dark)">
+                  <source srcset="img/icon/icon-rounded-256.avif" type="image/avif">
+                  <img src="img/icon/icon-rounded-256.png" alt="" width="256" height="256">
+                </picture>
+              </span><span class="hl-word" data-word>spending,</span></span><span class="hl-row"><span class="hl-kept" data-kept>kept.</span></span>
+          </span>
+        </h1>
+        <button class="pp pp-dark hl-toggle" type="button" data-hl-toggle data-state="playing" hidden><span class="vh" data-hl-label>Pause the headline animation</span><svg class="i i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.6" height="12" rx="1.8"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.8"/></svg><svg class="i i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a1 1 0 0 0 1.5.86l8.7-5.4a1 1 0 0 0 0-1.72L8 3.74a1 1 0 0 0-1.5.86z"/></svg></button>
+      </div>
+    </div>
+    <div class="hero-copy">
+      <p class="promise">Your Apple Pay payments log themselves. You just pick the category.</p>
+      <div class="cta-row">
+        <!-- TODO: replace the href with the real App Store link once the app is live -->
+        <a class="capsule capsule-light" href="https://apps.apple.com/">Download on the App Store</a>
+      </div>
+      <p class="hero-meta">Free to download. iPhone with iOS 26 or later.</p>
+    </div>
+
+    <div class="hero-stage">
+      <figure class="phone-fig">
+        <div class="phone" role="img" aria-label="Demo: an Apple Pay payment of $5.40 at Coffee Roasters arrives as a notification, the category tray opens, Coffee is tapped, and the payment lands at the top of today's list while the month's total rolls up to $1,335.00." data-phone>
+          <div class="frame frame-phone" data-w="390" data-h="846">
+            <div class="ui ui-phone" aria-hidden="true" data-ui>
+              <div class="sb">
+                <span class="sb-time">9:41</span>
+                <span class="island"></span>
+                <span class="sb-icons">
+                  <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+                  <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0z"/><path d="M3.5 7a6.4 6.4 0 0 1 9 0l-1.4 1.4a4.4 4.4 0 0 0-6.2 0z"/><path d="M1.3 4.8a9.5 9.5 0 0 1 13.4 0l-1.4 1.4a7.5 7.5 0 0 0-10.6 0z"/></svg>
+                  <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.4"/><path d="M25 4.3v4.4a2.2 2.2 0 0 0 0-4.4z" opacity=".45"/></svg>
+                </span>
+              </div>
+
+              <div class="content" data-content>
+                <div class="ph-discs">
+                  <span class="disc"><svg viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5.6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="m13 13 4 4" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>
+                  <span class="disc"><svg viewBox="0 0 20 20"><path d="M4 6h12M6 10h8M8.5 14h3" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg></span>
+                  <span class="disc disc-end"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="6.2" fill="none" stroke="currentColor" stroke-width="3.4" stroke-dasharray="2.6 2.27"/><circle cx="10" cy="10" r="4.4" fill="none" stroke="currentColor" stroke-width="2.6"/></svg></span>
+                </div>
+                <div class="ph-period">
+                  <svg class="chev" viewBox="0 0 12 20"><path d="M9 3 3 10l6 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span class="ph-spent">Spent</span>
+                  <span class="pill-out">this month <svg viewBox="0 0 12 8"><path d="m2 2 4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <svg class="chev chev-r" viewBox="0 0 12 20"><path d="m3 3 6 7-6 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="ph-total num" data-total>$1,329.60</div>
+                <div class="ph-quiet">+$4,700.00 income · ↓ 51% vs October</div>
+                <div class="ph-budget">
+                  <span class="ph-left"><span class="num" data-left>$770.40</span> left</span>
+                  <span class="ph-days">13 days to go</span>
+                </div>
+                <div class="ph-bar"><span class="bar bar-in"><span class="bar-fill" data-bar></span></span><span class="bar-tick" style="left:56.7%"></span></div>
+
+                <div class="list" data-list>
+                  <div class="lh" style="top:0">
+                    <span class="lh-t">Today</span><span class="badge num" data-count>3</span>
+                    <span class="lh-sum num" data-daysum>$64.59</span>
+                  </div>
+                  <!-- rows that arrive during the loop (hidden at rest) -->
+                  <div class="row row-new" data-new="0" style="top:40px"><span class="tile t40" style="--c:#A2845E" data-newtile><img src="img/g/coffee.png" alt=""></span><span class="r-t">Coffee Roasters</span><span class="r-s">Coffee · 9:41 AM</span><span class="r-a num" data-newamt>$5.40</span></div>
+                  <div class="row row-new" data-new="1" style="top:40px"><span class="tile t40" style="--c:#34C759" data-newtile><img src="img/g/groceries.png" alt=""></span><span class="r-t">Green Market</span><span class="r-s">Groceries · 9:41 AM</span><span class="r-a num" data-newamt>$23.18</span></div>
+                  <div class="row row-new" data-new="2" style="top:40px"><span class="tile t40" style="--c:#FF863E" data-newtile><img src="img/g/dining.png" alt=""></span><span class="r-t">Noodle House</span><span class="r-s">Dining · 9:41 AM</span><span class="r-a num" data-newamt>$12.50</span></div>
+                  <!-- rows already there -->
+                  <div class="row" data-shift style="top:40px"><span class="tile t40" style="--c:#FD6F8E"><img src="img/g/shopping.png" alt=""></span><span class="r-t">Home</span><span class="r-s">Shopping · 9:05 AM</span><span class="r-a num">$39.99</span></div>
+                  <div class="row" data-shift style="top:104px"><span class="tile t40" style="--c:#A2845E"><img src="img/g/coffee.png" alt=""></span><span class="r-t">Corner Cafe</span><span class="r-s">Coffee · 8:40 AM</span><span class="r-a num">$6.20</span></div>
+                  <div class="row" data-shift style="top:168px"><span class="tile t40" style="--c:#007AFF"><img src="img/g/transport.png" alt=""></span><span class="r-t">City Rides</span><span class="r-s">Transport · 8:12 AM</span><span class="r-a num">$18.40</span></div>
+                  <div class="lh" data-shift style="top:240px"><span class="lh-t">Yesterday</span><span class="badge num">4</span><span class="lh-sum num">$96.85</span></div>
+                  <div class="row" data-shift style="top:280px"><span class="tile t40" style="--c:#00C8BF"><img src="img/g/pets.png" alt=""></span><span class="r-t">Pet Supply Co.</span><span class="r-s">Family &amp; Pets · 6:15 PM</span><span class="r-a num">$31.60</span></div>
+                  <div class="row" data-shift style="top:344px"><span class="tile t40" style="--c:#F966AC"><img src="img/g/fun.png" alt=""></span><span class="r-t">Cinema</span><span class="r-s">Fun · 4:30 PM</span><span class="r-a num">$24.00</span></div>
+                  <div class="row" data-shift style="top:408px"><span class="tile t40" style="--c:#FFB800"><img src="img/g/bills.png" alt=""></span><span class="r-t">Power &amp; Light</span><span class="r-s">Bills &amp; Utilities · 9:00 AM</span><span class="r-a num">$38.35</span></div>
+                </div>
+              </div>
+
+              <div class="fade-bottom"></div>
+              <div class="tabbar">
+                <span class="tab-pill"></span>
+                <span class="tab"><svg viewBox="-13 -13 26 26" class="tg tg-on"><rect x="-12" y="-9.8" width="4.4" height="4.4" rx="2.2"/><rect x="-5.2" y="-9.8" width="15.2" height="4.4" rx="2.2"/><rect x="-12" y="-2.2" width="4.4" height="4.4" rx="2.2"/><rect x="-5.2" y="-2.2" width="15.2" height="4.4" rx="2.2"/><rect class="acc" x="-12" y="5.4" width="4.4" height="4.4" rx="2.2"/><rect class="acc" x="-5.2" y="5.4" width="9" height="4.4" rx="2.2"/></svg></span>
+                <span class="tab"><svg viewBox="-13 -13 26 26" class="tg"><rect x="-12.1" y="-2" width="4.4" height="14" rx="2.2"/><rect x="-5.4" y="-12" width="4.4" height="24" rx="2.2"/><rect x="1.3" y="3" width="4.4" height="9" rx="2.2"/><rect x="8" y="-6" width="4.4" height="18" rx="2.2"/></svg></span>
+                <span class="tab"><svg viewBox="-13 -13 26 26" class="tg"><rect x="-12.5" y="-8.8" width="25" height="4.4" rx="2.2" opacity=".3"/><rect x="-12.5" y="-8.8" width="17.5" height="4.4" rx="2.2"/><rect x="-12.5" y="4.4" width="25" height="4.4" rx="2.2" opacity=".3"/><rect x="-12.5" y="4.4" width="9" height="4.4" rx="2.2"/></svg></span>
+                <span class="tab"><span class="add-disc"><svg viewBox="-13 -13 26 26"><rect x="-8" y="-2.2" width="16" height="4.4" rx="2.2"/><rect x="-2.2" y="-8" width="4.4" height="16" rx="2.2"/></svg></span></span>
+              </div>
+
+              <div class="scrim" data-scrim></div>
+
+              <div class="banner" data-banner="0"><span class="b-icon ni"></span><span class="b-title">$5.40 · Coffee Roasters</span><span class="b-time">now</span><span class="b-body">Tap a category</span></div>
+              <div class="banner" data-banner="1"><span class="b-icon ni"></span><span class="b-title">$23.18 · Green Market</span><span class="b-time">now</span><span class="b-body">Tap a category</span></div>
+              <div class="banner" data-banner="2"><span class="b-icon ni"></span><span class="b-title">$12.50 · Noodle House</span><span class="b-time">now</span><span class="b-body">Tap a category</span></div>
+
+              <div class="tray" data-tray>
+                <span class="grabber"></span>
+                <div class="tr-head"><span class="tr-title">Choose a category</span><span class="disc disc-x"><svg viewBox="0 0 20 20"><path d="m6 6 8 8M14 6l-8 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></div>
+                <div class="tr-amt num" data-tamt="0">$5.40</div>
+                <div class="tr-amt num" data-tamt="1">$23.18</div>
+                <div class="tr-amt num" data-tamt="2">$12.50</div>
+                <div class="tr-m" data-tm="0"><b>Coffee Roasters</b><span>Apple Card · Today, 9:41 AM</span></div>
+                <div class="tr-m" data-tm="1"><b>Green Market</b><span>Apple Card · Today, 9:41 AM</span></div>
+                <div class="tr-m" data-tm="2"><b>Noodle House</b><span>Apple Card · Today, 9:41 AM</span></div>
+                <div class="grid8" data-grid>
+                  <span class="cell"><span class="tile t56" style="--c:#A2845E"><img src="img/g/coffee.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Coffee</i></span>
+                  <span class="cell"><span class="tile t56" style="--c:#34C759"><img src="img/g/groceries.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Groceries</i></span>
+                  <span class="cell"><span class="tile t56" style="--c:#FF863E"><img src="img/g/dining.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Dining</i></span>
+                  <span class="cell"><span class="tile t56" style="--c:#007AFF"><img src="img/g/transport.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Transport</i></span>
+                  <span class="cell"><span class="tile t56" style="--c:#805FF8"><img src="img/g/home.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Rent &amp; Home</i></span>
+                  <span class="cell"><span class="tile t56" style="--c:#FFB800"><img src="img/g/bills.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Bills</i></span>
+                  <span class="cell"><span class="tile t56" style="--c:#DC1FFF"><img src="img/g/subscriptions.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Subscriptions</i></span>
+                  <span class="cell"><span class="tile t56" style="--c:#FD6F8E"><img src="img/g/shopping.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Shopping</i></span>
+                </div>
+                <div class="morphcap" data-done>
+                  <span class="mc-base" data-mcbase><span class="mc-l"></span><span class="mc-m"></span><span class="mc-r"></span><span class="mc-label">Done</span></span>
+                  <span class="mc-on" data-mcon><span class="mc-l" data-mcl></span><span class="mc-m" data-mcm></span><span class="mc-r" data-mcr></span><span class="mc-label" data-donelabel>Done</span></span>
+                  <svg class="mc-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+
+              <span class="finger" data-finger></span>
+            </div>
+          </div>
+        </div>
+        <!-- Try it: while the tray is up, its tiles are real buttons (inert otherwise). A pick takes over the demo. -->
+        <div class="picks" role="group" aria-label="Try it: file the demo payment under a category" data-picks inert>
+            <button class="pick" type="button" data-pick="0" data-key="coffee" style="--col:0;--row:0">Coffee</button>
+            <button class="pick" type="button" data-pick="1" data-key="groceries" style="--col:1;--row:0">Groceries</button>
+            <button class="pick" type="button" data-pick="2" data-key="dining" style="--col:2;--row:0">Dining</button>
+            <button class="pick" type="button" data-pick="3" data-key="transport" style="--col:3;--row:0">Transport</button>
+            <button class="pick" type="button" data-pick="4" data-key="home" style="--col:0;--row:1">Rent &amp; Home</button>
+            <button class="pick" type="button" data-pick="5" data-key="bills" style="--col:1;--row:1">Bills</button>
+            <button class="pick" type="button" data-pick="6" data-key="subscriptions" style="--col:2;--row:1">Subscriptions</button>
+            <button class="pick" type="button" data-pick="7" data-key="shopping" style="--col:3;--row:1">Shopping</button>
+        </div>
+        <figcaption class="loop-bar">
+          <button class="pp pp-dark" type="button" data-pp="hero"><span class="vh">Pause the demo and the background</span><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.6" height="12" rx="1.8"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.8"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a1 1 0 0 0 1.5.86l8.7-5.4a1 1 0 0 0 0-1.72L8 3.74a1 1 0 0 0-1.5.86z"/></svg></button>
+          <button class="pp pp-dark step-btn" type="button" data-step="-1" hidden><span class="vh">Previous step</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4.5 6.5 10l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <span class="caption" aria-hidden="true" data-caption>Pay with Apple Pay</span>
+          <span class="vh" aria-live="polite" data-step-live></span>
+          <button class="pp pp-dark again" type="button" data-again hidden><span class="vh">Try again</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.2 10a5.8 5.8 0 1 0 1.8-4.2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M3.6 3.2v4.1h4.1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="pp pp-dark step-btn" type="button" data-step="1" hidden><span class="vh">Next step</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 4.5 5.5 5.5L8 15.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
 </section>
-<section class="card">
-<h2>How it works</h2>
-<p>You add one shortcut to Kept, once. After that, each card payment you make with your iPhone is logged by Kept, which asks you for a category. It relies on the Shortcuts app and on Wallet payment notifications, so a few banks and a few payments may not log on their own. You can always add an expense by hand.</p>
-<h2>What you get</h2>
-<ul>
-<li>A log of your spending by day, with search, filters and Insights.</li>
-<li>Budgets, overall and by category, with what is left and a daily allowance.</li>
-<li>Reminders before a recurring charge, when a budget runs low, and when automatic logging goes quiet. You choose which to keep, and Kept sends at most one scheduled reminder a day.</li>
-<li>Recurring bills and subscriptions.</li>
-<li>Receipt scanning with your camera, read on your iPhone.</li>
-<li>Split a payment with friends and track who owes you.</li>
-<li>Widgets for the Home Screen and Lock Screen, and an Apple Watch app for quick adding.</li>
-<li>CSV import and export, and a Face ID lock.</li>
-</ul>
-<p>Kept is free to use with limits. Kept Pro adds more features and higher limits, with a monthly, yearly (7-day free trial) or one-time lifetime plan. See the <a href="terms.html">Terms</a> for prices.</p>
-<h2>Private by design</h2>
-<p>Your data stays on your iPhone. There is no account and no server run by the developer. Optional iCloud sync (Kept Pro) uses your own private iCloud. No analytics, no tracking, no ads. Read the <a href="privacy.html">Privacy Policy</a>.</p>
+
+<!-- ============ HOW: automatic logging, honestly ============ -->
+<section class="sec how" id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="eyebrow">Automatic logging</p>
+      <h2 id="how-title" class="h2">Set it up once.<br><span class="acc">Then just pay.</span></h2>
+      <p class="lede">A one-time setup in the Shortcuts app takes a few minutes. After that, each Apple Pay payment reaches Kept with its amount, merchant and card, and a notification asks for the category. One tap files it, right from the Lock Screen.</p>
+    </div>
+    <ol class="how-steps">
+      <li class="how-card rv">
+        <span class="how-tag">iOS 27</span>
+        <h3>When Wallet notifies you</h3>
+        <p>The shortcut runs when Wallet sends its payment notification. Kept comes with the shortcut, ready to add.</p>
+      </li>
+      <li class="how-card rv">
+        <span class="how-tag">iOS 26</span>
+        <h3>When you tap to pay</h3>
+        <p>A Wallet automation runs as you pay with your card. The setup guide in Kept walks you through it, and Test it checks the path without paying.</p>
+      </li>
+      <li class="how-card rv">
+        <span class="how-tag">Always</span>
+        <h3>When one slips by</h3>
+        <p>Some banks send no Wallet notification, and a shortcut can miss a payment now and then. Payments you have not filed yet wait in Needs a category. One the shortcut missed takes a few seconds to add by hand.</p>
+      </li>
+    </ol>
+    <p class="how-note rv">Kept never sees your card number and never connects to your bank. It gets only what Shortcuts passes on from the payment: the amount, the merchant and the card name.</p>
+  </div>
 </section>
-<p>Need help? See <a href="support.html">Support</a>, the <a href="privacy.html">Privacy Policy</a> or the <a href="terms.html">Terms of Use</a>.</p>
-</div></main>
-<footer><div class="wrap">
-<p>Kept is made by Egor Privalov. Questions: <a href="mailto:eprivalovdev@gmail.com">eprivalovdev@gmail.com</a></p>
-<p><a href="index.html">Home</a> · <a href="support.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
-<p>Apple Pay, Wallet, Shortcuts, Apple Watch, iCloud and App Store are trademarks of Apple Inc. Kept is not affiliated with or endorsed by Apple.</p>
-</div></footer>
+
+<!-- ============ FEATURE: batch sort ============ -->
+<section class="sec feat" id="features" aria-labelledby="f-batch">
+  <div class="wrap feat-grid">
+    <div class="feat-copy rv">
+      <p class="eyebrow">Needs a category</p>
+      <h2 id="f-batch" class="h2">Sort a batch<br><span class="acc">in seconds.</span></h2>
+      <p class="lede">Payments that still need a category wait together in one tray. Tap a category and the next one is already there.</p>
+      <ul class="ticks">
+        <li>Kept remembers the merchant, so next time it can suggest the right category.</li>
+        <li>With Kept Pro, repeat merchants file themselves.</li>
+      </ul>
+    </div>
+    <div class="panel rv" style="--tint:#FF863E">
+      <div class="frame frame-stage" data-w="360" data-h="470" data-stage="batch">
+        <div class="ui ui-stage" aria-hidden="true">
+          <div class="tray tray-stage">
+            <span class="grabber"></span>
+            <div class="tr-head"><span class="tr-title">Needs a category</span><span class="disc disc-x"><svg viewBox="0 0 20 20"><path d="m6 6 8 8M14 6l-8 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></div>
+            <div class="bt-count num" data-bcount>2 of 5</div>
+            <div class="bt-amt num" data-bamt>$16.50</div>
+            <div class="bt-m" data-bm>Noodle House</div>
+            <div class="bt-d" data-bd>Apple Card · Nov 17 at 9:33 AM</div>
+            <div class="grid8 grid-b" data-bgrid>
+              <span class="cell"><span class="tile t52" style="--c:#FF863E"><img src="img/g/dining.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Dining</i></span>
+              <span class="cell"><span class="tile t52" style="--c:#A2845E"><img src="img/g/coffee.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Coffee</i></span>
+              <span class="cell"><span class="tile t52" style="--c:#34C759"><img src="img/g/groceries.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Groceries</i></span>
+              <span class="cell"><span class="tile t52" style="--c:#007AFF"><img src="img/g/transport.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Transport</i></span>
+              <span class="cell"><span class="tile t52" style="--c:#805FF8"><img src="img/g/home.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Rent &amp; Home</i></span>
+              <span class="cell"><span class="tile t52" style="--c:#FFB800"><img src="img/g/bills.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Bills</i></span>
+              <span class="cell"><span class="tile t52" style="--c:#DC1FFF"><img src="img/g/subscriptions.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Subscriptions</i></span>
+              <span class="cell"><span class="tile t52" style="--c:#FD6F8E"><img src="img/g/shopping.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Shopping</i></span>
+            </div>
+            <div class="capsule-ui" data-bdone><span>Done</span></div>
+          </div>
+          <span class="finger" data-finger></span>
+        </div>
+      </div>
+      <button class="pp pp-panel" type="button" data-pp="batch"><span class="vh">Pause the Needs a category animation</span><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.6" height="12" rx="1.8"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.8"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a1 1 0 0 0 1.5.86l8.7-5.4a1 1 0 0 0 0-1.72L8 3.74a1 1 0 0 0-1.5.86z"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURE: budgets ============ -->
+<section class="sec feat feat-flip" aria-labelledby="f-budget">
+  <div class="wrap feat-grid">
+    <div class="feat-copy rv">
+      <p class="eyebrow">Budgets</p>
+      <h2 id="f-budget" class="h2">What is left,<br><span class="acc">at a glance.</span></h2>
+      <p class="lede">Set a monthly budget and Kept shows what is left, what you can spend per day, and whether you are spending faster than the month.</p>
+      <ul class="ticks">
+        <li>A heads-up at 80% and at 100%.</li>
+        <li>Budgets for each category come with Kept Pro.</li>
+      </ul>
+    </div>
+    <div class="panel rv" style="--tint:#FFB340">
+      <div class="frame frame-stage" data-w="360" data-h="486" data-stage="budget">
+        <div class="ui ui-stage" aria-hidden="true">
+          <div class="card bd-card">
+            <div class="bd-head"><b>Monthly budget</b><span>November</span></div>
+            <div class="gauge" data-gauge>
+              <svg class="g-track" viewBox="0 0 260 140"><path d="M20 130a110 110 0 0 1 220 0" fill="none" stroke-width="20" stroke-linecap="round"/></svg>
+              <span class="g-clip"><span class="g-rot" data-grot><svg viewBox="0 0 260 260"><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--ahead-a)"/><stop offset="1" stop-color="var(--ahead-b)"/></linearGradient></defs><path d="M240 130a110 110 0 0 1-220 0" fill="none" stroke="url(#gg)" stroke-width="20" stroke-linecap="round"/></svg></span></span>
+              <span class="g-cap"></span>
+              <span class="g-tick" style="--a:102deg"></span>
+              <div class="g-pct"><span class="num" data-gpct>63%</span><i>used</i></div>
+            </div>
+            <div class="bd-left num" data-gleft>$770.40</div>
+            <div class="bd-sub">left this month</div>
+            <div class="bd-pace"><span class="dot"></span>Spending faster than the month</div>
+          </div>
+          <div class="bd-minis">
+            <div class="card mini">
+              <div class="mini-h"><span class="tile t24" style="--c:#34C759"><img src="img/g/groceries.png" alt=""></span>Groceries</div>
+              <div class="mini-a num" data-ml0>$336.20</div><div class="mini-l">left</div>
+              <div class="bar mini-bar"><span class="bar-fill fill-ok" data-mb0></span></div>
+            </div>
+            <div class="card mini">
+              <div class="mini-h"><span class="tile t24" style="--c:#FF863E"><img src="img/g/dining.png" alt=""></span>Dining</div>
+              <div class="mini-a num" data-ml1>$33.70</div><div class="mini-l">left</div>
+              <div class="bar mini-bar"><span class="bar-fill" data-mb1></span></div>
+            </div>
+          </div>
+          <div class="pay-chip" data-paychip="0"><span class="tile t24" style="--c:#34C759"><img src="img/g/groceries.png" alt=""></span><b>Green Market</b><span class="num">$84.20</span></div>
+          <div class="pay-chip" data-paychip="1"><span class="tile t24" style="--c:#FF863E"><img src="img/g/dining.png" alt=""></span><b>Noodle House</b><span class="num">$26.40</span></div>
+        </div>
+      </div>
+      <button class="pp pp-panel" type="button" data-pp="budget"><span class="vh">Pause the Budgets animation</span><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.6" height="12" rx="1.8"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.8"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a1 1 0 0 0 1.5.86l8.7-5.4a1 1 0 0 0 0-1.72L8 3.74a1 1 0 0 0-1.5.86z"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURE: bills and reminders ============ -->
+<section class="sec feat" aria-labelledby="f-bills">
+  <div class="wrap feat-grid">
+    <div class="feat-copy rv">
+      <p class="eyebrow">Recurring</p>
+      <h2 id="f-bills" class="h2">Bills and<br><span class="acc">subscriptions.</span></h2>
+      <p class="lede">Kept keeps your recurring payments with their next date and reminds you before a charge: on the day, the day before, or three days before.</p>
+      <ul class="ticks">
+        <li>Cancelled it, or skipping this one? Say so right on the notification.</li>
+        <li>Kept also tells you if automatic logging goes quiet. At most one scheduled reminder a day.</li>
+      </ul>
+    </div>
+    <div class="panel rv" style="--tint:#DC1FFF">
+      <div class="frame frame-stage" data-w="360" data-h="430" data-stage="bills">
+        <div class="ui ui-stage" aria-hidden="true">
+          <div class="card rc-card" data-rcard>
+            <div class="rc-head"><b>Recurring</b><span>4 payments</span></div>
+            <div class="rc-row"><span class="tile t40" style="--c:#DC1FFF"><img src="img/g/subscriptions.png" alt=""></span><span class="r-t">Streaming</span><span class="r-s">Subscriptions · Monthly</span><span class="r-a num">$15.99</span><span class="rc-next" data-next>Next: Tomorrow</span></div>
+            <div class="rc-row"><span class="tile t40" style="--c:#FF453A"><img src="img/g/health.png" alt=""></span><span class="r-t">Gym</span><span class="r-s">Health · Monthly</span><span class="r-a num">$39.00</span><span class="rc-next">Next: Nov 20</span></div>
+            <div class="rc-row"><span class="tile t40" style="--c:#DC1FFF"><img src="img/g/subscriptions.png" alt=""></span><span class="r-t">Cloud storage</span><span class="r-s">Subscriptions · Monthly</span><span class="r-a num">$2.99</span><span class="rc-next">Next: Nov 21</span></div>
+            <div class="rc-row"><span class="tile t40" style="--c:#805FF8"><img src="img/g/home.png" alt=""></span><span class="r-t">Rent</span><span class="r-s">Rent &amp; Home · Monthly</span><span class="r-a num">$1,450.00</span><span class="rc-next">Next: Nov 28</span></div>
+          </div>
+          <div class="banner banner-stage" data-rbanner><span class="b-icon ni"></span><span class="b-title">Tomorrow: Streaming $15.99</span><span class="b-time">9:00 AM</span><span class="b-body">Kept</span></div>
+          <div class="actions" data-ractions><span>I cancelled it</span><span>Skip this time</span></div>
+          <span class="finger" data-finger></span>
+        </div>
+      </div>
+      <button class="pp pp-panel" type="button" data-pp="bills"><span class="vh">Pause the Recurring animation</span><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.6" height="12" rx="1.8"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.8"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a1 1 0 0 0 1.5.86l8.7-5.4a1 1 0 0 0 0-1.72L8 3.74a1 1 0 0 0-1.5.86z"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURE: insights ============ -->
+<section class="sec feat feat-flip" aria-labelledby="f-ins">
+  <div class="wrap feat-grid">
+    <div class="feat-copy rv">
+      <p class="eyebrow">Insights</p>
+      <h2 id="f-ins" class="h2">Where your<br><span class="acc">money goes.</span></h2>
+      <p class="lede">Spending by category, this month against the last, and your top merchants. Switch between week, month and year.</p>
+      <ul class="ticks">
+        <li>Free shows the last 3 months. Kept Pro shows your full history.</li>
+        <li>Top merchants for every week, month and year.</li>
+      </ul>
+    </div>
+    <div class="panel rv" style="--tint:#34C759">
+      <div class="frame frame-stage" data-w="360" data-h="440" data-stage="insights">
+        <div class="ui ui-stage" aria-hidden="true">
+          <div class="card in-card">
+            <div class="seg" data-seg><span class="seg-pill" data-segpill></span><span>Week</span><span>Month</span><span>Year</span></div>
+            <div class="in-period"><svg class="chev" viewBox="0 0 12 20"><path d="M9 3 3 10l6 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="in-pl"><b data-plabel>November</b><span data-psub>This month</span></span><svg class="chev" viewBox="0 0 12 20"><path d="m3 3 6 7-6 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="in-spent">Spent</div>
+            <div class="in-total num" data-itotal>$1,329.60</div>
+            <div class="stack" data-stack><span style="--c:#34C759"></span><span style="--c:#FD6F8E"></span><span style="--c:#FF863E"></span><span style="--c:#FF453A"></span><span style="--c:#7B909A"></span><i></i><i></i><i></i><i></i></div>
+            <div class="in-rows">
+              <div class="in-row"><span class="tile t28" style="--c:#34C759"><img src="img/g/groceries.png" alt=""></span><b>Groceries</b><span class="in-p num" data-ip0>35%</span><span class="in-a num" data-ia0>$463.80</span></div>
+              <div class="in-row"><span class="tile t28" style="--c:#FD6F8E"><img src="img/g/shopping.png" alt=""></span><b>Shopping</b><span class="in-p num" data-ip1>26%</span><span class="in-a num" data-ia1>$341.98</span></div>
+              <div class="in-row"><span class="tile t28" style="--c:#FF863E"><img src="img/g/dining.png" alt=""></span><b>Dining</b><span class="in-p num" data-ip2>13%</span><span class="in-a num" data-ia2>$166.30</span></div>
+              <div class="in-row"><span class="tile t28" style="--c:#FF453A"><img src="img/g/health.png" alt=""></span><b>Health</b><span class="in-p num" data-ip3>7%</span><span class="in-a num" data-ia3>$98.18</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="pp pp-panel" type="button" data-pp="insights"><span class="vh">Pause the Insights animation</span><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.6" height="12" rx="1.8"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.8"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a1 1 0 0 0 1.5.86l8.7-5.4a1 1 0 0 0 0-1.72L8 3.74a1 1 0 0 0-1.5.86z"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURE: widgets ============ -->
+<section class="sec feat" aria-labelledby="f-wid">
+  <div class="wrap feat-grid">
+    <div class="feat-copy rv">
+      <p class="eyebrow">Widgets</p>
+      <h2 id="f-wid" class="h2">Home Screen,<br><span class="acc">Lock Screen.</span></h2>
+      <p class="lede">Today's spend, what is left of the budget and what is due next, without opening the app. Add an expense from Control Center or ask Siri.</p>
+      <ul class="ticks">
+        <li>The small Today widget, the Lock Screen Budget and Today widgets, the round and inline ones, and the three Control Center controls are free. The rest come with Kept Pro.</li>
+        <li>An Apple Watch app for quick adding, with complications.</li>
+      </ul>
+    </div>
+    <div class="panel panel-wid rv" style="--tint:#6FA3D1">
+      <div class="wid" data-stage="widgets">
+        <div class="seg seg-web" role="group" aria-label="Show widgets on">
+          <span class="seg-pill" data-wpill aria-hidden="true"></span>
+          <button type="button" aria-pressed="true" data-wbtn="0">Home Screen</button>
+          <button type="button" aria-pressed="false" data-wbtn="1">Lock Screen</button>
+        </div>
+        <div class="wid-phone">
+          <picture class="wid-img" data-wimg="0">
+            <source srcset="img/widgets/home-moneysmalls-dark-600.avif" type="image/avif" media="(prefers-color-scheme: dark)">
+            <source srcset="img/widgets/home-moneysmalls-dark-600.jpg" media="(prefers-color-scheme: dark)">
+            <source srcset="img/widgets/home-moneysmalls-light-600.avif" type="image/avif">
+            <img src="img/widgets/home-moneysmalls-light-600.jpg" width="600" height="1304" loading="lazy" decoding="async" alt="Home Screen with Kept widgets: Spending $1,842.50, down 22 percent; This month plus $682.50; Upcoming $1,580.49; Budget 61 percent; and a medium Budget widget with six category rings.">
+          </picture>
+          <picture class="wid-img" data-wimg="1">
+            <source srcset="img/widgets/lock-todayandcirculars-dark-600.avif" type="image/avif" media="(prefers-color-scheme: dark)">
+            <source srcset="img/widgets/lock-todayandcirculars-dark-600.jpg" media="(prefers-color-scheme: dark)">
+            <source srcset="img/widgets/lock-todayandcirculars-light-600.avif" type="image/avif">
+            <img src="img/widgets/lock-todayandcirculars-light-600.jpg" width="600" height="1304" loading="lazy" decoding="async" alt="Lock Screen at 9:41 with Kept widgets: a budget line above the clock, a Today widget, a 61 percent budget circle and an Add expense control.">
+          </picture>
+        </div>
+      </div>
+      <!-- two of the widgets up close, beside the phone (wide panels only) -->
+      <div class="wfloats" aria-hidden="true">
+        <picture class="wf wf-small"><source srcset="img/widgets/w-small-dark.jpg" media="(prefers-color-scheme: dark)"><img src="img/widgets/w-small-light.jpg" width="340" height="340" alt="" loading="lazy" decoding="async"></picture>
+        <picture class="wf wf-medium"><source srcset="img/widgets/w-medium-dark.jpg" media="(prefers-color-scheme: dark)"><img src="img/widgets/w-medium-light.jpg" width="600" height="280" alt="" loading="lazy" decoding="async"></picture>
+      </div>
+      <button class="pp pp-panel" type="button" data-pp="widgets"><span class="vh">Pause the Widgets animation</span><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.6" height="12" rx="1.8"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.8"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a1 1 0 0 0 1.5.86l8.7-5.4a1 1 0 0 0 0-1.72L8 3.74a1 1 0 0 0-1.5.86z"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MORE ============ -->
+<section class="sec more" aria-labelledby="more-title">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="eyebrow">Also in Kept</p>
+      <h2 id="more-title" class="h2">The rest of<br><span class="acc">the kit.</span></h2>
+    </div>
+    <ul class="more-grid">
+      <li class="more-card rv"><span class="mg" aria-hidden="true" style="--c:#007AFF"><svg viewBox="-13 -13 26 26"><rect x="-9" y="-11" width="18" height="22" rx="4.5" fill="none" stroke="currentColor" stroke-width="3"/><rect x="-4.6" y="-5.4" width="9.2" height="3.4" rx="1.7"/><rect x="-4.6" y=".6" width="5.6" height="3.4" rx="1.7"/></svg></span><h3>Receipt scanning</h3><p>Use the camera or a photo. The receipt is read on your iPhone, and the photo stays there. 3 free scans, then unlimited with Kept Pro.</p></li>
+      <li class="more-card rv"><span class="mg" aria-hidden="true" style="--c:#00C8BF"><svg viewBox="-13 -13 26 26"><circle cx="-5.5" cy="-5" r="4.2"/><circle cx="6" cy="-5" r="4.2"/><rect x="-12" y="3" width="13" height="4.4" rx="2.2"/><rect x="-0.5" y="3" width="13" height="4.4" rx="2.2" opacity=".55"/></svg></span><h3>Split with friends <em class="tag-pro">Pro</em></h3><p>Split a payment and keep track of who has paid you back.</p></li>
+      <li class="more-card rv"><span class="mg" aria-hidden="true" style="--c:#34C759"><svg viewBox="-13 -13 26 26"><rect x="-11" y="-9.4" width="9" height="4.4" rx="2.2"/><rect x="1" y="-9.4" width="10" height="4.4" rx="2.2"/><rect x="-11" y="-2.2" width="9" height="4.4" rx="2.2"/><rect x="1" y="-2.2" width="10" height="4.4" rx="2.2"/><rect x="-11" y="5" width="9" height="4.4" rx="2.2"/><rect x="1" y="5" width="10" height="4.4" rx="2.2"/></svg></span><h3>CSV import and export</h3><p>Bring your history in from a CSV file. Export everything to CSV with Kept Pro.</p></li>
+      <li class="more-card rv"><span class="mg" aria-hidden="true" style="--c:#805FF8"><svg viewBox="-13 -13 26 26"><rect x="-12" y="-6" width="24" height="12" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="5.5" cy="0" r="3.4"/></svg></span><h3>Siri and Control Center</h3><p>Ask Siri what you spent today or what is left, or tell it a new expense. The Control Center button opens Add in one tap.</p></li>
+      <li class="more-card rv"><span class="mg" aria-hidden="true" style="--c:#FF863E"><svg viewBox="-13 -13 26 26"><rect x="-4.5" y="-12.5" width="9" height="4.4" rx="2.2"/><rect x="-4.5" y="8.1" width="9" height="4.4" rx="2.2"/><rect x="-8" y="-8.5" width="16" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><rect x="-1.2" y="-4.6" width="2.4" height="5.4" rx="1.2"/></svg></span><h3>Apple Watch</h3><p>A Watch app for quick adding, with complications.</p></li>
+      <li class="more-card rv"><span class="mg" aria-hidden="true" style="--c:#5F6B7A"><svg viewBox="-13 -13 26 26"><path d="M-5.5-2.5v-3a5.5 5.5 0 0 1 11 0v3" fill="none" stroke="currentColor" stroke-width="3"/><rect x="-9" y="-2.5" width="18" height="14" rx="4.5"/></svg></span><h3>Face ID lock</h3><p>Lock Kept with Face ID, and hide amounts on the Lock Screen.</p></li>
+      <li class="more-card rv"><span class="mg" aria-hidden="true" style="--c:#00AAFF"><svg viewBox="-13 -13 26 26"><path d="M-6.5 7.5h13a5.5 5.5 0 0 0 .4-11A7.6 7.6 0 0 0-7.6-2.2 4.9 4.9 0 0 0-6.5 7.5z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></span><h3>iCloud sync <em class="tag-pro">Pro</em></h3><p>Optional sync through your own private iCloud database. No account with us.</p></li>
+      <li class="more-card rv"><span class="mg" aria-hidden="true" style="--c:#C21AE0"><svg viewBox="-13 -13 26 26"><text x="0" y="6.2" text-anchor="middle" font-size="17" font-weight="800">Aa</text></svg></span><h3>17 languages</h3><p>English, Spanish, German, French, Japanese, Korean, Hindi and ten more.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PRIVACY ============ -->
+<section class="sec feat feat-flip" id="privacy" aria-labelledby="f-priv">
+  <div class="wrap feat-grid">
+    <div class="feat-copy rv">
+      <p class="eyebrow">Private by design</p>
+      <h2 id="f-priv" class="h2">No account.<br>No bank login.<br><span class="acc">No ads.</span></h2>
+      <p class="lede">Your data stays on your iPhone. There are no servers run by the developer, no analytics and no third-party SDKs. The App Store privacy label says Data Not Collected.</p>
+      <ul class="ticks">
+        <li>Optional iCloud sync (Kept Pro) uses your own private iCloud.</li>
+        <li>Double-tap the total to hide amounts when someone is looking.</li>
+        <li>This website, too: no cookies, no analytics, nothing loaded from elsewhere.</li>
+      </ul>
+      <p class="more-link"><a href="privacy.html">Read the Privacy Policy</a></p>
+    </div>
+    <div class="panel rv" style="--tint:#7B909A">
+      <div class="frame frame-stage" data-w="360" data-h="400" data-stage="privacy">
+        <div class="ui ui-stage" aria-hidden="true">
+          <div class="card pv-card">
+            <div class="ph-period pv-period"><span class="ph-spent">Spent</span><span class="pill-out">this month <svg viewBox="0 0 12 8"><path d="m2 2 4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+            <div class="pv-total num" data-ptotal>$1,329.60</div>
+            <div class="pv-quiet" data-pquiet>+$4,700.00 income</div>
+          </div>
+          <div class="card sw-card">
+            <div class="sw-row"><span class="tile t32" style="--c:#00AAFF"><svg viewBox="-13 -13 26 26"><path d="M-6.5 7.5h13a5.5 5.5 0 0 0 .4-11A7.6 7.6 0 0 0-7.6-2.2 4.9 4.9 0 0 0-6.5 7.5z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/></svg></span><b>iCloud sync</b><span class="switch on"><i></i></span></div>
+            <div class="sw-row"><span class="tile t32" style="--c:#5F6B7A"><svg viewBox="-13 -13 26 26"><path d="M-5.5-2.5v-3a5.5 5.5 0 0 1 11 0v3" fill="none" stroke="#fff" stroke-width="3"/><rect x="-9" y="-2.5" width="18" height="14" rx="4.5" fill="#fff"/></svg></span><b>Face ID lock</b><span class="switch on"><i></i></span></div>
+          </div>
+          <span class="tap-ring" data-tapring></span>
+          <span class="finger" data-finger></span>
+        </div>
+      </div>
+      <button class="pp pp-panel" type="button" data-pp="privacy"><span class="vh">Pause the privacy animation</span><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.6" height="12" rx="1.8"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.8"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a1 1 0 0 0 1.5.86l8.7-5.4a1 1 0 0 0 0-1.72L8 3.74a1 1 0 0 0-1.5.86z"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSING ============ -->
+<section class="closing" aria-labelledby="close-title">
+  <div class="wrap closing-in rv">
+    <picture class="closing-icon"><source srcset="img/icon/icon-dark-rounded-256.avif" type="image/avif" media="(prefers-color-scheme: dark)"><source srcset="img/icon/icon-dark-rounded-256.png" media="(prefers-color-scheme: dark)"><source srcset="img/icon/icon-rounded-256.avif" type="image/avif"><img src="img/icon/icon-rounded-256.png" width="256" height="256" loading="lazy" decoding="async" alt="Kept app icon"></picture>
+    <h2 id="close-title" class="h2">Pay. Tap. Kept.</h2>
+    <p class="lede">Pay as usual. Tap a category. That is the whole loop.</p>
+    <!-- TODO: replace the href with the real App Store link once the app is live -->
+    <a class="capsule capsule-ink" href="https://apps.apple.com/">Download on the App Store</a>
+    <p class="closing-meta">Free to download. Kept Pro is an optional in-app purchase. iPhone with iOS 26 or later, Apple Watch app included.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p>Kept is made by Egor Privalov. Questions: <a href="mailto:eprivalovdev@gmail.com">eprivalovdev@gmail.com</a></p>
+    <p class="foot-links"><a href="index.html">Home</a> · <a href="support.html">Support</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
+    <p class="tm">Apple, Apple Pay, Apple Card, Apple Watch, iPhone, Siri, Face ID, Wallet, Shortcuts, iCloud, CloudKit and Apple Intelligence are trademarks of Apple Inc. App Store is a service mark of Apple Inc. Kept is not affiliated with or endorsed by Apple.</p>
+  </div>
+</footer>
 </body>
 </html>
