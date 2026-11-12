@@ -1,8 +1,9 @@
 /* Kept website: one stylesheet for the home page and the Support, Privacy and Terms pages.
    Tokens are Kept's own (Shared/DesignSystem/Colors.swift), springs are the app's (Motion.swift) sampled into linear().
    Only transform and opacity ever animate. Everything inside a .ui block is drawn in iPhone points and scaled as one.
-   Web-only AA adjustments (not brand colours): links #0062CC, income text #007A49, secondary text on tinted cards #566A75,
-   idle segment labels #4E616C (light mode). The app hex stays for fills, bars, dots and big numbers. */
+   Web-only AA adjustments (not brand colours): links #0062CC, income text #007A49 (also the small income lines inside
+   the drawings), secondary text on tinted cards, the count badge and the notification banners #566A75, idle segment labels
+   #4E616C (light mode). The app hex stays for fills, bars, dots and big numbers. */
 
 :root {
   --rounded: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, sans-serif;
@@ -207,9 +208,10 @@ header.site nav a { display: inline-flex; align-items: center; min-height: 44px;
    --hls is the headline size: the longest row ([disc] "groceries,", the widest word) is 5.4 em in SF Pro Rounded Heavy,
    the two-row line ("Your [disc] groceries,") 7.6 em; the divisors keep that and some slack for other system fonts. */
 .hero {
-  --hls: min(calc((100vw - 2 * var(--gutter)) / 5.8), 120px);
+  --hls: min(calc((100vw - 2 * var(--gutter)) / 6.6), 116px); /* B's phone size */
   --pw: min(80vw, 330px); /* the phone's width */
-  position: relative; isolation: isolate; overflow: hidden; background: var(--ink); color: #fff; padding: 92px 0 40px;
+  position: relative; isolation: isolate; overflow: hidden; background: var(--ink); color: #fff;
+  padding: calc(76px + clamp(28px, 6vw, 88px)) 0 40px; /* B's: the eyebrow at 104 px on phones, 162 px at 1440 */
   -webkit-tap-highlight-color: transparent;
 }
 /* its own layer, so the drifting chips (their own layers) can never draw over it, paused or not */
@@ -278,16 +280,18 @@ header.site nav a { display: inline-flex; align-items: center; min-height: 44px;
 }
 @media (min-width: 960px) {
   .hero {
-    /* B's size: the content width / 9.1, so "Your [disc] groceries," (7.6 em) fills about 84 % of the row */
-    --hls: min(calc((min(100vw, 1200px) - 2 * var(--gutter)) / 9.1), 132px);
+    /* B's size: B's content width (1200 px between the gutters) / 9.1, at most 132 px, so 131.9 px at 1440 as in B.
+       "Your [disc] groceries," (7.6 em, 1003 px) still fits A's 1104 px column. */
+    --hls: min(calc((min(100vw, 1200px + 2 * var(--gutter)) - 2 * var(--gutter)) / 9.1), 132px);
     --pw: clamp(270px, 23vw, 320px);
     --hgap: clamp(40px, 4vw, 56px);
-    padding: 104px 0 64px;
+    padding-bottom: 64px;
   }
   .hero-grid { grid-template-columns: minmax(0, 1fr) var(--pw); grid-template-rows: auto auto 1fr; grid-template-areas: "head head" "copy stage" ". stage"; column-gap: var(--hgap); }
   .hl-your { display: inline; }
   .hero-copy { margin-top: clamp(32px, 3vw, 48px); }
-  /* the phone comes up beside "kept.", clear of the descenders of row 1 (B: -.8 em) */
+  /* the phone comes up beside "kept.", its top about .18 em under the top of that row and clear of the descenders of
+     row 1: B's -.8 em, measured on B at rest (its top 360 px at 1440, "kept." row at 336 px) */
   .hero-stage { margin-top: calc(var(--hls) * -.8); align-self: start; justify-content: flex-end; }
   .glow { left: 80%; top: 64%; }
 }
@@ -297,6 +301,8 @@ header.site nav a { display: inline-flex; align-items: center; min-height: 44px;
    blur baked in (no CSS filter). The field never takes a pointer event; the hero listens and the field only draws.
    Static masks keep chips out of the header band and away from the text (JS sets the geometry once per layout). */
 .field { position: absolute; left: 0; right: 0; top: var(--ft, 0px); bottom: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.field-hero:not([data-ready]) { visibility: hidden; }
+@media (min-width: 960px) { .field-hero { --ft: 80px; } } /* the header band + 4 px, what JS sets there */
 .field-hero {
   -webkit-mask-image: linear-gradient(180deg, transparent 0, rgb(0 0 0 / var(--fa, 1)) var(--f1, 56px), rgb(0 0 0 / var(--fa, 1)) var(--f2, 56px), #000 var(--f3, 56px));
   mask-image: linear-gradient(180deg, transparent 0, rgb(0 0 0 / var(--fa, 1)) var(--f1, 56px), rgb(0 0 0 / var(--fa, 1)) var(--f2, 56px), #000 var(--f3, 56px));
@@ -368,7 +374,7 @@ header.site nav a { display: inline-flex; align-items: center; min-height: 44px;
 .pill-out { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 12px; border-radius: 15px; border: 1.5px solid var(--separator); font-weight: 700; font-size: 16px; }
 .pill-out svg { position: static; width: 11px; height: 8px; }
 .ph-total { left: 0; top: 150px; width: 390px; height: 64px; text-align: center; font-weight: 800; font-size: 54px; line-height: 64px; letter-spacing: -.02em; }
-.ph-quiet { left: 0; top: 220px; width: 390px; text-align: center; font-weight: 600; font-size: 14px; color: var(--income-ui); }
+.ph-quiet { left: 0; top: 220px; width: 390px; text-align: center; font-weight: 600; font-size: 14px; color: var(--income); }
 .ph-budget { left: 20px; top: 250px; width: 350px; height: 20px; }
 .ph-left { left: 0; top: 0; font-weight: 700; font-size: 15px; white-space: nowrap; }
 .ph-left .num { position: relative; display: inline-block; width: 62px; height: 20px; vertical-align: top; }
@@ -384,7 +390,7 @@ header.site nav a { display: inline-flex; align-items: center; min-height: 44px;
 .list { left: 0; top: 302px; width: 390px; height: 544px; }
 .lh { left: 20px; width: 350px; height: 40px; }
 .lh-t { left: 0; top: 7px; font-weight: 800; font-size: 21px; }
-.lh .badge { left: 76px; top: 9px; width: 26px; height: 22px; border-radius: 11px; background: var(--surface-muted); font-weight: 800; font-size: 13px; line-height: 22px; text-align: center; color: var(--text-2); }
+.lh .badge { left: 76px; top: 9px; width: 26px; height: 22px; border-radius: 11px; background: var(--surface-muted); font-weight: 800; font-size: 13px; line-height: 22px; text-align: center; color: var(--text-2p); }
 .lh:not(:first-child) .badge { left: 112px; }
 .lh-sum { right: 0; top: 10px; width: 90px; height: 20px; text-align: right; font-weight: 600; font-size: 15px; color: var(--text-2); }
 .row { left: 0; width: 390px; height: 64px; }
@@ -408,8 +414,8 @@ header.site nav a { display: inline-flex; align-items: center; min-height: 44px;
 .banner { left: 10px; top: 52px; width: 370px; height: 76px; border-radius: 24px; background: var(--banner); box-shadow: 0 10px 30px rgb(0 0 0 / .16), 0 0 0 .5px rgb(0 0 0 / .06); font-family: var(--system); opacity: 0; }
 .b-icon { left: 14px; top: 19px; width: 38px !important; height: 38px !important; border-radius: 9px; }
 .b-title { left: 62px; top: 17px; font-weight: 600; font-size: 15px; letter-spacing: -.01em; white-space: nowrap; }
-.b-time { right: 16px; top: 18px; font-weight: 500; font-size: 13px; color: var(--text-2); }
-.b-body { left: 62px; top: 38px; font-weight: 500; font-size: 15px; color: var(--text-2); }
+.b-time { right: 16px; top: 18px; font-weight: 500; font-size: 13px; color: var(--text-2p); }
+.b-body { left: 62px; top: 38px; font-weight: 500; font-size: 15px; color: var(--text-2p); }
 
 .tray { left: 10px; bottom: 10px; width: 370px; height: 450px; border-radius: 38px; background: var(--surface); box-shadow: 0 -2px 30px rgb(0 0 0 / .12); transform: translateY(480px); }
 .grabber { left: 167px; top: 7px; width: 36px; height: 5px; border-radius: 3px; background: var(--separator); }
@@ -537,7 +543,7 @@ header.site nav a { display: inline-flex; align-items: center; min-height: 44px;
 .pv-card { left: 10px; top: 10px; width: 340px; height: 184px; }
 .pv-period { top: 22px; width: 340px; }
 .pv-total { left: 0; top: 62px; width: 340px; height: 62px; text-align: center; font-weight: 800; font-size: 50px; line-height: 62px; letter-spacing: -.02em; }
-.pv-quiet { left: 0; top: 130px; width: 340px; height: 20px; text-align: center; font-weight: 700; font-size: 14px; line-height: 20px; color: var(--income-ui); white-space: nowrap; }
+.pv-quiet { left: 0; top: 130px; width: 340px; height: 20px; text-align: center; font-weight: 700; font-size: 14px; line-height: 20px; color: var(--income); white-space: nowrap; }
 .sw-card { left: 10px; top: 214px; width: 340px; height: 136px; }
 .sw-row { position: relative !important; display: flex !important; align-items: center; gap: 12px; height: 68px; padding: 0 16px; }
 .sw-row > * { position: relative; }
@@ -713,9 +719,13 @@ header.site nav a { display: inline-flex; align-items: center; min-height: 44px;
 /* ---------- reveal (only with JS; content is visible without it) ---------- */
 .js .rv { opacity: 0; transform: translateY(24px); }
 .js .rv.in { opacity: 1; transform: none; transition: opacity 700ms cubic-bezier(.2, .7, .3, 1) var(--d, 0ms), transform var(--dur-nav) var(--ease-nav) var(--d, 0ms); }
+.js .rv:focus-within { opacity: 1; transform: none; transition: none; }
 @media (prefers-reduced-motion: reduce) {
   .js .rv { transform: none; }
   .js .rv.in { transition: opacity 200ms ease; }
+  .js .rv:focus-within { transition: none; }
+  /* the feature stages hold still frames, so their pause discs are never in the page (or in the Tab order) */
+  .js .pp-panel { display: none; }
   .capsule:hover, .fbar-cta:hover { transform: none; }
   .fbar { transition: opacity 200ms ease, visibility 0s linear 200ms; transform: translate(-50%, 0); }
   .fbar-pill i, .seg-web .seg-pill, .pp > svg, .doc summary::after { transition-duration: 0s; }

@@ -324,8 +324,9 @@
 
   const frames = $$('.frame[data-w]');
   const fit = f => { const w = f.clientWidth; if (w) f.style.setProperty('--s', String(w / Number(f.dataset.w))); };
-  frames.forEach(fit);
+  // The observer's first callback comes with the first layout, before the first paint, so the script never forces one.
   if ('ResizeObserver' in window) { const ro = new ResizeObserver(es => es.forEach(e => fit(e.target))); frames.forEach(f => ro.observe(f)); }
+  else frames.forEach(fit);
 
 
   /* ------------------------------------------------------------- the hero loop */
@@ -954,6 +955,7 @@
     heroField.build();
     heroField.setRun(heroRun, true);
     heroField.setNear(heroNear);
+    heroHost.dataset.ready = ''; // its top and masks are set: it may show now (hidden until then, so placing it shifts nothing)
 
     // Rebuild only when the layout really changed (a phone's URL bar showing or hiding changes nothing here).
     let lastW = innerWidth, lastH = hero.offsetHeight, t = 0;
@@ -1115,7 +1117,8 @@
     function showDisc(key, animate) {
       discs.forEach((el, k) => {
         el.classList.remove('on');
-        const visible = +getComputedStyle(el).opacity > 0.01;
+        // read only when animating: at boot this would force the page's first style pass inside the script
+        const visible = animate && +getComputedStyle(el).opacity > 0.01;
         if (k === key) {
           if (!animate) { el.getAnimations().forEach(a => a.cancel()); Object.assign(el.style, { opacity: 1, transform: 'none' }); return; }
           if (reduceMQ.matches) { el.style.transform = 'none'; tweenTo(el, { opacity: 1 }, { duration: 220 }); }
@@ -1176,8 +1179,8 @@
     if (!reduceMQ.matches) {
       toggle.hidden = false;
       setState('playing');
-      place();
-      if ('ResizeObserver' in window) new ResizeObserver(place).observe(wrap);
+      // placed with the first layout (the observer's first callback), never by a forced layout at boot
+      if ('ResizeObserver' in window) new ResizeObserver(place).observe(wrap); else place();
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
       toggle.addEventListener('click', () => {
         st.paused = !st.paused;
@@ -1512,9 +1515,16 @@
   /* --------------------------------------------------------- build everything */
 
   const loops = {};
+  // A task after the first paint (a frame, then a fresh task), so building never holds up that paint or a first tap.
+  const afterPaint = fn => requestAnimationFrame(() => setTimeout(fn, 0));
   if (hero) {
+    // Reduce Motion: the hero's controls are the stepper's from the start, before its loop is built.
+    if (reduceMQ.matches) {
+      const bar = $('.loop-bar');
+      if (bar) { $('[data-pp="hero"]', bar).hidden = true; $$('.step-btn', bar).forEach(b => { b.hidden = false; }); }
+    }
     // the field first draws after the headline and the phone are on screen
-    requestAnimationFrame(() => setupHeroField());
+    afterPaint(() => setupHeroField());
     heroCtl = control(() => {
       const lp = heroLp() || heroLoop();
       if (lp) { lp.still = lp.steps[0]; loops.hero = lp; }
@@ -1530,7 +1540,9 @@
       onNear: near => { heroNear = near; if (heroField) heroField.setNear(near); },
       onBuild: lp => { stepper = heroStepper(lp); clock(); }
     });
-    heroCtl.ensure();
+    // The static markup already shows the loop's first frame, so the loop (the page's biggest build) waits for the first
+    // paint. Review frames build it at once.
+    if (frozen != null || demo) heroCtl.ensure(); else afterPaint(() => heroCtl.ensure());
   }
   const featureLoops = [
     ['batch', batchLoop, 'the Needs a category animation'], ['budget', budgetLoop, 'the Budgets animation'],
@@ -1573,6 +1585,11 @@
     }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
     rv.forEach(el => io.observe(el));
   }
+  // Keyboard focus inside a section that has not come in yet brings it in at once (the CSS shows it while focused).
+  document.addEventListener('focusin', e => {
+    const el = e.target && e.target.closest ? e.target.closest('.rv') : null;
+    if (el && !el.classList.contains('in')) { el.style.setProperty('--d', '0ms'); el.classList.add('in'); }
+  });
 
   /* --------------------------------------------------------- floating section bar */
 
