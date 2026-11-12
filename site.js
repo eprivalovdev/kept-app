@@ -696,10 +696,13 @@
     const root = $('[data-stage="widgets"]'); if (!root) return null;
     const L = 8400, lp = new Loop('widgets', L);
     const pill = $('[data-wpill]', root), img1 = $('[data-wimg="1"]', root), btns = $$('[data-wbtn]', root);
+    const stack = $('[data-lkstack]', root); // phones only (display: none elsewhere, so it costs nothing there)
     lp.btns = btns;
-    lp.init(pill, { xp: 0 }).init(img1, { o: 0 });
+    lp.init(pill, { xp: 0 }).init(img1, { o: 0 }).init(stack, { o: 0, y: 14 });
     lp.to(pill, 4000, { xp: 100 }, D.on, E.on).fade(img1, 4000, 1, 420, E.io);
-    lp.to(pill, 8200, { xp: 0 }, 0, E.lin).fade(img1, 8200, 0, 0);
+    // the notifications arrive a beat after the Lock Screen shows, rising into place
+    lp.to(stack, 4260, { o: 1, y: 0, od: 240 }, D.on, E.on);
+    lp.to(pill, 8200, { xp: 0 }, 0, E.lin).fade(img1, 8200, 0, 0).jump(stack, 8200, { o: 0, y: 14 });
     // a real control too: pressing a side plays the same transition and holds there
     lp.marks = [{ from: 0, to: 3900 }, { from: 4000, to: 7900 }];
     lp.sync = () => { const t = lp.time, on = t >= 4000 && t < 8200 ? 1 : 0; btns.forEach((b, i) => b.setAttribute('aria-pressed', String(i === on))); };
@@ -736,18 +739,21 @@
   const LIFT = { far: -30, mid: -110, near: -240 }; // the CSS scroll drift, mirrored here for the pointer maths
   const FIELD_STYLES = {
     // The app's hero: far 9 @36 pt .36, mid 7 @54 pt .66, near 5 @78 pt .44; a little quicker on the web so motion reads.
-    hero: w => w < 600 ? [
-      { depth: 'far', count: 5, box: 54, opacity: .42, speed: 9, sway: 5 },
-      { depth: 'mid', count: 5, box: 58, opacity: .78, speed: 19, sway: 8 },
+    // C's counts (phones 13, tablets 18, desktop 23), set by the page's layouts (700 and 960 px) and spent only where the
+    // text cut-outs and the phone leave room (heroGeometry's spans). Phones get two more, since part of their way up is
+    // behind the copy's cut-outs.
+    hero: () => innerWidth < 700 ? [
+      { depth: 'far', count: 6, box: 54, opacity: .42, speed: 9, sway: 5 },
+      { depth: 'mid', count: 6, box: 58, opacity: .78, speed: 19, sway: 8 },
       { depth: 'near', count: 3, box: 118, opacity: .5, speed: 32, sway: 12 }
-    ] : w < 1000 ? [
+    ] : innerWidth < 960 ? [
       { depth: 'far', count: 7, box: 60, opacity: .4, speed: 10, sway: 5 },
-      { depth: 'mid', count: 6, box: 62, opacity: .76, speed: 20, sway: 9 },
-      { depth: 'near', count: 3, box: 134, opacity: .48, speed: 36, sway: 14 }
+      { depth: 'mid', count: 7, box: 62, opacity: .76, speed: 20, sway: 9 },
+      { depth: 'near', count: 4, box: 134, opacity: .48, speed: 36, sway: 14 }
     ] : [
-      { depth: 'far', count: 8, box: 66, opacity: .4, speed: 10, sway: 5 },
-      { depth: 'mid', count: 7, box: 66, opacity: .76, speed: 21, sway: 9 },
-      { depth: 'near', count: 4, box: 148, opacity: .46, speed: 38, sway: 14 }
+      { depth: 'far', count: 9, box: 66, opacity: .4, speed: 10, sway: 5 },
+      { depth: 'mid', count: 9, box: 66, opacity: .76, speed: 21, sway: 9 },
+      { depth: 'near', count: 5, box: 148, opacity: .46, speed: 38, sway: 14 }
     ]
   };
   // seeded random, so a field looks the same on every load (and in review frames)
@@ -787,7 +793,7 @@
         inner.append(layer);
         field.layers[d.depth] = layer;
         const inLayer = new Set();
-        const n = Math.max(1, Math.round(d.count * Math.min(1, Math.max(.45, total / W * 1.25))));
+        const n = d.count; // the counts are set per layout for the room the cut-outs leave (FIELD_STYLES)
         for (let i = 0; i < n; i++) {
           const c = {
             depth: d.depth, box: d.box, speed: d.speed, swayW: d.sway, rand, inLayer,
@@ -897,49 +903,102 @@
   const headEl = $('.hero-head'), hlEl = $('.hl'), copyEl = $('.hero-copy'), headerEl = $('header.site');
   let heroField = null;
 
-  // Keep the chips out of the header band (the page links) and off the text. The field starts below the band (tablets:
-  // below the headline; phones: below the copy) and a static mask fades it in. Masks cut feathered holes where the text is,
-  // so chips may rise beside or below it but fade before they reach it. Measured once per layout, never per frame.
+  // Keep the chips out of the header band (the page links) and off the text. The field starts just below the band and a
+  // static mask fades it in. Masks cut feathered holes where the text is, so chips may rise beside, between and below the
+  // lines but fade before they reach a letter. Measured once per layout, never per frame.
   const cut = (a, b, y) => `linear-gradient(90deg, #000 ${Math.max(0, a - 44)}px, transparent ${a}px, transparent ${b}px, #000 ${b + 44}px), linear-gradient(180deg, transparent ${y}px, #000 ${y + 64}px)`;
-  const textRight = el => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect().right; };
+  const textRect = el => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect(); };
+  const textRight = el => textRect(el).right;
+  // one rect per line of an element's text (a two-line promise gives two holes, so chips can show beside its short line)
+  const lineRects = el => {
+    const r = document.createRange(); r.selectNodeContents(el);
+    const out = [];
+    for (const b of r.getClientRects()) {
+      if (b.width < 1) continue;
+      const same = out.find(o => Math.abs(o.top - b.top) < 4);
+      if (same) { same.left = Math.min(same.left, b.left); same.right = Math.max(same.right, b.right); same.bottom = Math.max(same.bottom, b.bottom); }
+      else out.push({ left: b.left, right: b.right, top: b.top, bottom: b.bottom });
+    }
+    return out;
+  };
+  /**
+   * Phones and tablets: one static mask, an SVG with a feathered hole around each piece of text (blurred once when it is
+   * drawn, never per frame) and, on phones, a soft bottom edge. holes: [x0, y0, x1, y1] in field coordinates.
+   */
+  function holeMask(holes, W, H, fadeFrom) {
+    const rects = holes.map(([x0, y0, x1, y1]) => `<rect x="${Math.round(x0)}" y="${Math.round(y0)}" width="${Math.round(x1 - x0)}" height="${Math.round(y1 - y0)}" rx="16"/>`).join('');
+    const fade = fadeFrom != null && fadeFrom < H
+      ? `<linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000"/></linearGradient>` : '';
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><defs>${fade}` +
+      `<filter id="b" filterUnits="userSpaceOnUse" x="-60" y="-60" width="${W + 120}" height="${H + 120}"><feGaussianBlur stdDeviation="7"/></filter>` +
+      `<mask id="m" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="#fff"/><g filter="url(#b)">${rects}</g>` +
+      (fade ? `<rect y="${Math.round(fadeFrom)}" width="${W}" height="${Math.round(H - fadeFrom)}" fill="url(#f)"/>` : '') +
+      `</mask></defs><rect width="${W}" height="${H}" mask="url(#m)"/></svg>`;
+    return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+  }
   function heroGeometry() {
     const hr = hero.getBoundingClientRect(), W = hr.width;
-    const hl = hlEl.getBoundingClientRect(), copy = copyEl.getBoundingClientRect(), head = headEl.getBoundingClientRect();
+    const copy = copyEl.getBoundingClientRect(), head = headEl.getBoundingClientRect();
     const fs = parseFloat(getComputedStyle(hlEl).fontSize) || 60;
     const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom - hr.top : 76;
     const wide = innerWidth >= 960, tablet = !wide && innerWidth >= 700;
-    let top, ex = null, fx = null, fy = null, spans = null;
+    const line = $('.hl-wordline'), word = $('[data-word]'), wl = line.getBoundingClientRect();
+    const meas = measurer(word), widest = Math.max(...WORDS.map(w => meas.w(w[1]))); meas.done();
+    const r1 = Math.round(wl.left - hr.left + wl.width - word.getBoundingClientRect().width + widest + 12); // row 1 out to "groceries,"
+    const toggle = $('[data-hl-toggle]'), tg = toggle && !toggle.hidden ? toggle.getBoundingClientRect() : null;
+    const phone = $('.phone', hero).getBoundingClientRect();
+    let top = headerBottom + 4, bottom = 0, ex = null, fx = null, fy = null, spans = null;
     if (wide) {
       // B's composition: row 1 ("Your [disc] word,") runs across most of the width, "kept." and the copy sit under its
       // left end, the phone to the right. Two holes: row 1 out to its widest word ("groceries,"), and the text column
-      // down to the copy's bottom. Chips rise all the way up in the margins, and beside the phone under row 1.
-      top = headerBottom + 4;
+      // down to the copy's bottom. Chips rise all the way up in the margins, beside the phone under row 1, and right of
+      // row 1 above the phone; none in the phone's column under row 1, where row 1 and the phone would hide them all the way.
       const L = Math.round(Math.min(head.left, copy.left) - hr.left - 18);
-      const line = $('.hl-wordline'), word = $('[data-word]'), wl = line.getBoundingClientRect();
-      const meas = measurer(word), widest = Math.max(...WORDS.map(w => meas.w(w[1]))); meas.done();
-      const r1 = Math.round(wl.left - hr.left + wl.width - word.getBoundingClientRect().width + widest + 12);
       const y1 = Math.round(wl.bottom - hr.top - top + fs * 0.14); // below the descenders of row 1
-      const toggle = $('[data-hl-toggle]'), tr = toggle && !toggle.hidden ? toggle.getBoundingClientRect().right : 0;
-      const rc = Math.round(Math.max(tr, textRight($('[data-kept]')), textRight($('.promise', copyEl)), $('.cta-row', copyEl).lastElementChild.getBoundingClientRect().right, textRight($('.hero-meta', copyEl))) - hr.left + 12);
+      const rc = Math.round(Math.max(tg ? tg.right : 0, textRight($('[data-kept]')), textRight($('.promise', copyEl)), $('.cta-row', copyEl).lastElementChild.getBoundingClientRect().right, textRight($('.hero-meta', copyEl))) - hr.left + 12);
       fx = cut(L, r1, y1);
       fy = cut(L, rc, Math.round(copy.bottom - hr.top - top + 16));
       // no chip rises along a cut's side edge, where it would show sliced in half; under the copy only if that strip is tall
-      const m = 44, Hf = hr.height - top, yc = copy.bottom - hr.top - top + 16;
-      spans = [[0, L - m], [rc + m, r1 - m], [r1 + m, W]];
+      const m = 44, Hf = hr.height - top, yc = copy.bottom - hr.top - top + 16, pl = Math.round(phone.left - hr.left);
+      spans = [[0, L - m], [rc + m, Math.min(r1, pl) - 24], [r1 + m, W]];
       if ((Hf - yc) / Hf > 0.35) spans.push([L + m, rc - m]);
-    } else if (tablet) {
-      top = hl.bottom - hr.top + fs * 0.14; // below the descenders
-      ex = [copy.left - hr.left - 18, copy.right - hr.left + 10];
-    } else top = copy.bottom - hr.top + 16; // phones: the chips live around the phone, under the copy
-    const H = hr.height - top;
-    const yb = copy.bottom - hr.top - top + 16; // the copy's bottom edge, in field coordinates
+    } else {
+      // Phones and tablets: chips rise through the whole first screen, as in C, beside "Your" and "kept.", between the
+      // copy and the phone and beside it; a feathered hole around each line of text keeps them off every letter.
+      const at = b => [b.left - hr.left, b.top - hr.top - top, b.right - hr.left, b.bottom - hr.top - top];
+      // with the 7 px blur, a letter sits at least 1.9 sigma inside its hole (under 3 % of a chip shows there), and a
+      // chip is fully back about 14 px outside it
+      const pad = ([x0, y0, x1, y1], px = 16, py = 12) => [x0 - px, y0 - py, x1 + px, y1 + py];
+      const holes = [];
+      const eyebrow = $('.eyebrow', headEl);
+      if (eyebrow) holes.push(pad(at(textRect(eyebrow))));
+      holes.push(pad(at(textRect($('.hl-your')))));
+      holes.push(pad([wl.left - hr.left, wl.top - hr.top - top, r1, wl.bottom - hr.top - top]));
+      const k = $('[data-kept]').getBoundingClientRect();
+      holes.push(pad(at({ left: k.left, top: k.top, right: Math.max(k.right, tg ? tg.right : 0), bottom: k.bottom })));
+      lineRects($('.promise', copyEl)).forEach(b => holes.push(pad(at(b))));
+      holes.push(pad(at($('.cta-row', copyEl).lastElementChild.getBoundingClientRect()), 14, 10));
+      lineRects($('.hero-meta', copyEl)).forEach(b => holes.push(pad(at(b))));
+      if (tablet) {
+        // the phone stands in the right column from beside "kept." down: no chip rises behind it
+        const pl = Math.round(phone.left - hr.left), pr = Math.round(phone.right - hr.left);
+        spans = [[-8, pl - 28], [pr + 4, W + 8]];
+      } else {
+        // phones: below the middle of the phone it fills the width (only slivers would show), so the field ends there with
+        // a soft edge; chips rise mostly on the right, where "Your" and "kept." leave room, and a few in the left gutter
+        bottom = Math.max(0, Math.round(hr.bottom - (phone.top + phone.height * 0.52)));
+        spans = [[-10, 14], [Math.round(W * 0.4), W + 6]];
+      }
+      const H = Math.round(hr.height - top - bottom);
+      fx = holeMask(holes, Math.round(W), H, bottom ? H - 140 : null);
+    }
+    const H = hr.height - top - bottom;
     heroHost.style.setProperty('--ft', Math.round(top) + 'px');
-    if (ex) fx = cut(Math.round(ex[0]), Math.round(ex[1]), Math.round(yb));
+    heroHost.style.setProperty('--fb', bottom + 'px');
     const mx = $('[data-field-mask]', heroHost), my = $('[data-field-x]', heroHost);
     if (fx) mx.style.setProperty('--fx', fx); else mx.style.removeProperty('--fx');
     if (fy) my.style.setProperty('--fy', fy); else my.style.removeProperty('--fy');
-    // chips under the copy only where that strip is tall enough to show them for a while
-    return { W, H, top, ex, fx, fy, spans, under: ex && (H - yb) / H > 0.35 };
+    return { W, H, top, bottom, ex, fx, fy, spans };
   }
 
   function setupHeroField() {
@@ -947,7 +1006,7 @@
     let geo = heroGeometry();
     heroField = makeField(heroHost, 'hero', {
       seed: 7,
-      allowed: W => geo.spans ? geo.spans.slice().sort((a, b) => a[0] - b[0]) : geo.ex && !geo.under ? [[0, geo.ex[0] - 36], [geo.ex[1] + 36, W]] : [[0, W]]
+      allowed: W => geo.spans ? geo.spans.slice().sort((a, b) => a[0] - b[0]) : [[0, W]]
     });
     const lean = { far: [10, 7], mid: [22, 15], near: [44, 28] };
     let nx = 0, ny = 0;
@@ -968,9 +1027,9 @@
         geo = heroGeometry(); heroField.build();
       }, 200);
     });
-    // once the fonts are in, rebuild only if the text moved enough to matter (system fonts usually change nothing)
+    // once the fonts are in, rebuild only if the text moved enough to matter (system fonts usually change nothing); the
+    // masks follow the text either way (heroGeometry sets them)
     const moved = (a, b) => Math.abs(a.W - b.W) > 6 || Math.abs(a.H - b.H) > 24 || Math.abs(a.top - b.top) > 6 ||
-      !!a.ex !== !!b.ex || (a.ex && (Math.abs(a.ex[0] - b.ex[0]) > 6 || Math.abs(a.ex[1] - b.ex[1]) > 6)) ||
       (a.spans || []).length !== (b.spans || []).length || (a.spans || []).some((s, i) => Math.abs(s[0] - b.spans[i][0]) > 6 || Math.abs(s[1] - b.spans[i][1]) > 6);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { const g = heroGeometry(); if (moved(g, geo)) { geo = g; heroField.build(); } heroField.fontsDone = true; });
     else heroField.fontsDone = true;
@@ -1032,9 +1091,10 @@
   }
 
   /* --------------------------------------------------------- the headline: one word morphs, letter by letter
-     Its own loop on timers (never frames), independent of the phone below: coffee, groceries, rent, takeout, flights,
-     gifts, about 1.8 s each, then "Your [Kept icon] spending, kept." holds about 4.6 s, then the icon turns back into the
-     coffee disc and it goes round again, forever. Shared letters glide to their new place (longest common subsequence, so
+     Its own loop on timers (never frames), independent of the phone below. It opens on "coffee" (2 s; set before the first
+     paint by the inline script after the h1) and builds up: groceries, rent, takeout, flights, gifts, about 1.8 s each,
+     then "Your [Kept icon] spending, kept." holds about 4.6 s, then the icon turns back into the coffee disc and it goes
+     round again, forever. Shared letters glide to their new place (longest common subsequence, so
      letters never cross), leaving letters fade out within 130 ms, entering ones start at 90 ms (the app's MorphingLabel
      timing), while the disc turns out and the next one turns in. It stops off screen, in a hidden tab and from its own
      disc. Screen readers, no-JS and Reduce Motion get "Your spending, kept." */
@@ -1104,14 +1164,15 @@
 
   // [disc key, word]; the last one is the brand line. "groceries," is the widest row and sets the type size.
   const WORDS = [['coffee', 'coffee,'], ['groceries', 'groceries,'], ['rent', 'rent,'], ['takeout', 'takeout,'], ['flights', 'flights,'], ['gifts', 'gifts,'], ['spending', 'spending,']];
-  const HOLD = { word: 1800, home: 4600, first: 2600 }; // ms on a category, on "spending" (the long hold), and at first sight
+  const HOLD = { word: 1800, home: 4600, first: 2000 }; // ms on a category, on "spending" (the long hold), and on the opening "coffee"
 
   const headline = (() => {
     const wordEl = $('[data-word]'), toggle = $('[data-hl-toggle]'), label = $('[data-hl-label]'), wrap = $('[data-hl-wrap]');
     if (!wordEl || !toggle) return null;
     const discs = new Map($$('[data-disc] > .d').map(d => [d.dataset.key, d]));
     const HOME = WORDS.length - 1;
-    const st = { i: HOME, paused: false, inView: true, timer: 0, due: 0, left: null };
+    // The page's inline script has already switched to "coffee" when motion is on (B's start); otherwise it is the brand line.
+    const st = { i: wordEl.textContent.trim() === WORDS[0][1] ? 0 : HOME, paused: false, inView: true, timer: 0, due: 0, left: null };
     const idx = k => typeof k === 'number' ? k : Math.max(0, WORDS.findIndex(w => w[0] === k));
 
     function showDisc(key, animate) {
@@ -1159,7 +1220,7 @@
     }
     function update() {
       const run = running();
-      if (run && !st.timer) schedule(st.left == null ? HOLD.first : Math.max(700, st.left));
+      if (run && !st.timer) schedule(st.left == null ? (st.i === HOME ? HOLD.home : HOLD.first) : Math.max(700, st.left));
       else if (!run && st.timer) { clearTimeout(st.timer); st.timer = 0; st.left = Math.max(0, st.due - performance.now()); }
     }
 
@@ -1171,8 +1232,8 @@
       const k = kept.getBoundingClientRect(), w = wrap.getBoundingClientRect(), fs = parseFloat(getComputedStyle(hlEl).fontSize) || 60;
       if (k.width) toggle.style.left = Math.round(k.right - w.left + fs * 0.3 - 4) + 'px'; // the disc's edge 0.3 em after the dot
     };
-    buildChars(wordEl, WORDS[HOME][1]);
-    showDisc('spending', false);
+    buildChars(wordEl, WORDS[st.i][1]);
+    showDisc(WORDS[st.i][0], false);
     const forced = H.get('word'); // review frames: #freeze=0&word=groceries
     if (forced) show(forced, false);
     // Reduce Motion: the headline rests on its brand line, so there is nothing to pause.

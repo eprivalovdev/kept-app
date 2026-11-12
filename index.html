@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kept">
 <meta property="og:title" content="Kept: Expense Tracker &amp; Budget">
-<meta property="og:description" content="Pay. Tap. Kept. Your Apple Pay payments log themselves. You just pick the category.">
+<meta property="og:description" content="Pay. Tap. Kept. Your in-store Apple Pay payments log themselves. You just pick the category.">
 <meta property="og:url" content="https://eprivalovdev.github.io/kept-app/">
 <meta property="og:image" content="https://eprivalovdev.github.io/kept-app/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -68,7 +68,7 @@
     <div class="hero-head">
       <p class="eyebrow eyebrow-dark">Expense tracker for iPhone</p>
       <div class="hl-wrap" data-hl-wrap>
-        <!-- One word morphs letter by letter on its own clock: coffee, groceries, rent, takeout, flights, gifts, then the app icon and "spending" for a long hold, and round again. Screen readers, no-JS and Reduce Motion get "Your spending, kept." -->
+        <!-- One word morphs letter by letter on its own clock: coffee, groceries, rent, takeout, flights, gifts, then the app icon and "spending" for a long hold, and round again from coffee. Screen readers, no-JS and Reduce Motion get "Your spending, kept." -->
         <h1 id="hero-title" class="hl">
           <span class="vh">Your spending, kept.</span>
           <span class="hl-vis" aria-hidden="true">
@@ -88,11 +88,13 @@
               </span><span class="hl-word" data-word>spending,</span></span><span class="hl-row"><span class="hl-kept" data-kept>kept.</span></span>
           </span>
         </h1>
+        <!-- With motion on, the loop opens on "coffee" and builds up to the brand line (variant B's start). Set here, before the first paint, so "spending" never flashes first. -->
+        <script>(function () { try { if (matchMedia('(prefers-reduced-motion: reduce)').matches || /(^|[#&])(freeze|demo|word)=/.test(location.hash)) return; var h = document.getElementById('hero-title'); h.querySelector('[data-word]').textContent = 'coffee,'; h.querySelector('.d-icon').classList.remove('on'); h.querySelector('.d[data-key="coffee"]').classList.add('on'); } catch (e) {} })();</script>
         <button class="pp pp-dark hl-toggle" type="button" data-hl-toggle data-state="playing" hidden><span class="vh" data-hl-label>Pause the headline animation</span><svg class="i i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.6" height="12" rx="1.8"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.8"/></svg><svg class="i i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a1 1 0 0 0 1.5.86l8.7-5.4a1 1 0 0 0 0-1.72L8 3.74a1 1 0 0 0-1.5.86z"/></svg></button>
       </div>
     </div>
     <div class="hero-copy">
-      <p class="promise">Your Apple Pay payments log themselves. You just pick the category.</p>
+      <p class="promise">Your in-store Apple Pay payments log themselves. You just pick the category.</p>
       <div class="cta-row">
         <!-- TODO: replace the href with the real App Store link once the app is live -->
         <a class="capsule capsule-light" href="https://apps.apple.com/">Download on the App Store</a>
@@ -185,7 +187,7 @@
                   <span class="cell"><span class="tile t56" style="--c:#FF863E"><img src="img/g/dining.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Dining</i></span>
                   <span class="cell"><span class="tile t56" style="--c:#007AFF"><img src="img/g/transport.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Transport</i></span>
                   <span class="cell"><span class="tile t56" style="--c:#805FF8"><img src="img/g/home.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Rent &amp; Home</i></span>
-                  <span class="cell"><span class="tile t56" style="--c:#FFB800"><img src="img/g/bills.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Bills</i></span>
+                  <span class="cell"><span class="tile t56" style="--c:#FFB800"><img src="img/g/bills.png" alt=""></span><span class="ring"></span><span class="spark"></span><i class="two">Bills &amp; Utilities</i></span>
                   <span class="cell"><span class="tile t56" style="--c:#DC1FFF"><img src="img/g/subscriptions.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Subscriptions</i></span>
                   <span class="cell"><span class="tile t56" style="--c:#FD6F8E"><img src="img/g/shopping.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Shopping</i></span>
                 </div>
@@ -207,7 +209,7 @@
             <button class="pick" type="button" data-pick="2" data-key="dining" style="--col:2;--row:0">Dining</button>
             <button class="pick" type="button" data-pick="3" data-key="transport" style="--col:3;--row:0">Transport</button>
             <button class="pick" type="button" data-pick="4" data-key="home" style="--col:0;--row:1">Rent &amp; Home</button>
-            <button class="pick" type="button" data-pick="5" data-key="bills" style="--col:1;--row:1">Bills</button>
+            <button class="pick" type="button" data-pick="5" data-key="bills" style="--col:1;--row:1">Bills &amp; Utilities</button>
             <button class="pick" type="button" data-pick="6" data-key="subscriptions" style="--col:2;--row:1">Subscriptions</button>
             <button class="pick" type="button" data-pick="7" data-key="shopping" style="--col:3;--row:1">Shopping</button>
         </div>
@@ -230,7 +232,7 @@
     <div class="sec-head rv">
       <p class="eyebrow">Automatic logging</p>
       <h2 id="how-title" class="h2">Set it up once.<br><span class="acc">Then just pay.</span></h2>
-      <p class="lede">A one-time setup in the Shortcuts app takes a few minutes. After that, your Apple Pay payments reach Kept with their amount, merchant and card, and a notification asks for the category. One tap files it, right from the Lock Screen.</p>
+      <p class="lede">A one-time setup in the Shortcuts app takes a few minutes. After that, your in-store Apple Pay payments reach Kept with their amount, merchant and card, and a notification asks for the category. One tap files it, right from the Lock Screen.</p>
     </div>
     <ol class="how-steps">
       <li class="how-card rv">
@@ -241,7 +243,7 @@
       <li class="how-card rv">
         <span class="how-tag">iOS 26</span>
         <h3>When you tap to pay</h3>
-        <p>A Wallet automation runs as you pay with your card. The setup guide in Kept walks you through it, and its Test it button logs a sample payment, so you can check the setup without paying.</p>
+        <p>A Wallet automation runs when you tap your iPhone at a reader. The setup guide in Kept walks you through it, and its Test it button logs a sample payment, so you can check the setup without paying.</p>
       </li>
       <li class="how-card rv">
         <span class="how-tag">Always</span>
@@ -281,7 +283,7 @@
               <span class="cell"><span class="tile t52" style="--c:#34C759"><img src="img/g/groceries.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Groceries</i></span>
               <span class="cell"><span class="tile t52" style="--c:#007AFF"><img src="img/g/transport.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Transport</i></span>
               <span class="cell"><span class="tile t52" style="--c:#805FF8"><img src="img/g/home.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Rent &amp; Home</i></span>
-              <span class="cell"><span class="tile t52" style="--c:#FFB800"><img src="img/g/bills.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Bills</i></span>
+              <span class="cell"><span class="tile t52" style="--c:#FFB800"><img src="img/g/bills.png" alt=""></span><span class="ring"></span><span class="spark"></span><i class="two">Bills &amp; Utilities</i></span>
               <span class="cell"><span class="tile t52" style="--c:#DC1FFF"><img src="img/g/subscriptions.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Subscriptions</i></span>
               <span class="cell"><span class="tile t52" style="--c:#FD6F8E"><img src="img/g/shopping.png" alt=""></span><span class="ring"></span><span class="spark"></span><i>Shopping</i></span>
             </div>
@@ -437,18 +439,20 @@
             <source srcset="img/widgets/home-moneysmalls-light-600.avif" type="image/avif">
             <img src="img/widgets/home-moneysmalls-light-600.jpg" width="600" height="1304" loading="lazy" decoding="async" alt="Home Screen with Kept widgets: Spending $1,842.50, down 22 percent; This month plus $682.50; Upcoming $1,580.49; Budget 61 percent; and a medium Budget widget with six category rings.">
           </picture>
-          <picture class="wid-img" data-wimg="1">
-            <source srcset="img/widgets/lock-todayandcirculars-dark-600.avif" type="image/avif" media="(prefers-color-scheme: dark)">
-            <source srcset="img/widgets/lock-todayandcirculars-dark-600.jpg" media="(prefers-color-scheme: dark)">
-            <source srcset="img/widgets/lock-todayandcirculars-light-600.avif" type="image/avif">
-            <img src="img/widgets/lock-todayandcirculars-light-600.jpg" width="600" height="1304" loading="lazy" decoding="async" alt="Lock Screen at 9:41 with Kept widgets: a budget line above the clock, a Today widget, a 61 percent budget circle and an Add expense control.">
-          </picture>
+          <div class="wid-img" data-wimg="1">
+            <picture>
+              <source srcset="img/widgets/lock-todayandcirculars-dark-600.avif" type="image/avif" media="(prefers-color-scheme: dark)">
+              <source srcset="img/widgets/lock-todayandcirculars-dark-600.jpg" media="(prefers-color-scheme: dark)">
+              <source srcset="img/widgets/lock-todayandcirculars-light-600.avif" type="image/avif">
+              <img src="img/widgets/lock-todayandcirculars-light-600.jpg" width="600" height="1304" loading="lazy" decoding="async" alt="Lock Screen at 9:41 with Kept widgets: a budget line above the clock, a Today widget, a 61 percent budget circle and an Add expense button.">
+            </picture>
+            <!-- Phones only: the phone shows the top of its screen, so Kept's own "Tap a category" notifications fill the Lock Screen below the widgets (three waiting, as the Today widget says). -->
+            <div class="lk-stack" role="img" aria-label="Below them, a stack of three Kept notifications; the top one: $12.50 at Noodle House, tap a category." data-lkstack>
+              <div class="lk-note"><span class="lk-icon ni"></span><b>$12.50 · Noodle House</b><span class="lk-time">now</span><span class="lk-body">Tap a category</span></div>
+              <span class="lk-peek"></span><span class="lk-peek lk-peek2"></span>
+            </div>
+          </div>
         </div>
-      </div>
-      <!-- two of the widgets up close, beside the phone (wide panels only) -->
-      <div class="wfloats" aria-hidden="true">
-        <picture class="wf wf-small"><source srcset="img/widgets/w-small-dark.jpg" media="(prefers-color-scheme: dark)"><img src="img/widgets/w-small-light.jpg" width="340" height="340" alt="" loading="lazy" decoding="async"></picture>
-        <picture class="wf wf-medium"><source srcset="img/widgets/w-medium-dark.jpg" media="(prefers-color-scheme: dark)"><img src="img/widgets/w-medium-light.jpg" width="600" height="280" alt="" loading="lazy" decoding="async"></picture>
       </div>
       <button class="pp pp-panel" type="button" data-pp="widgets"><span class="vh">Pause the Widgets animation</span><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.6" height="12" rx="1.8"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.8"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.6v10.8a1 1 0 0 0 1.5.86l8.7-5.4a1 1 0 0 0 0-1.72L8 3.74a1 1 0 0 0-1.5.86z"/></svg></button>
     </div>
@@ -481,7 +485,7 @@
     <div class="feat-copy rv">
       <p class="eyebrow">Private by design</p>
       <h2 id="f-priv" class="h2">No account.<br>No bank login.<br><span class="acc">No ads.</span></h2>
-      <p class="lede">Your data stays on your iPhone. There are no servers run by the developer, no analytics and no third-party SDKs. The App Store privacy label says Data Not Collected.</p>
+      <p class="lede">Your data stays on your iPhone. There are no servers run by the developer, no analytics and no third-party SDKs, so Kept collects no data about you.</p>
       <ul class="ticks">
         <li>Optional iCloud sync (Kept Pro) uses your own private iCloud.</li>
         <li>Double-tap the total to hide amounts when someone is looking.</li>
