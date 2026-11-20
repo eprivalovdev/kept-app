@@ -42,7 +42,7 @@
     <div class="doc-dots" aria-hidden="true"><i style="--c:#805FF8"></i><i style="--c:#007AFF"></i><i style="--c:#FD6F8E"></i></div>
     <p class="eyebrow">Legal</p>
     <h1>Privacy Policy</h1>
-<p class="doc-meta">Effective date: November 8, 2026</p>
+<p class="doc-meta">Effective date: November 20, 2026</p>
   </div>
 </div>
 <div class="wrap doc-body">
@@ -57,7 +57,7 @@
 <li><a href="#contact">Contact</a></li>
 </ol></nav>
 <article class="doc">
-<p><strong>Short version:</strong> the developer of Kept collects no data about you. Kept has no account, no servers of its own, no analytics, no ads and no tracking. Your data stays on your iPhone. If you turn on iCloud sync, it also goes to your own private iCloud.</p>
+<p><strong>Short version:</strong> Kept collects nothing about you or your money. It has no account, no servers of its own, no analytics, no ads and no tracking. Your data stays on your iPhone. If you turn on iCloud sync, it also goes to your own private iCloud. The one thing the developer receives is an anonymous crash report when the app fails.</p>
 
 <h2 id="what-kept-stores-and-where">What Kept stores, and where</h2>
 <ul>
@@ -71,15 +71,16 @@
 <li><strong>Purchases.</strong> Subscriptions and the lifetime purchase are handled by Apple through the App Store. The developer does not receive your payment details or Apple Account.</li>
 <li><strong>Face ID.</strong> If you turn on the lock, the check is done by iOS. Kept never receives your biometric data.</li>
 <li><strong>Feedback.</strong> If you choose Contact support in Kept, Kept opens an email to the developer in the Mail app. It contains the topics and note you typed and the app version, iOS version, language and region. It does not contain your amounts, merchants or categories. Nothing is sent until you send the email.</li>
+<li><strong>Crash reports.</strong> If Kept crashes, it sends a crash report through Firebase Crashlytics, a Google service, the next time you open it. The report holds the place in the code where the app failed, your iPhone model, the iOS and Kept versions, the time of the crash and a random identifier of this installation. It does not hold your name, your Apple Account, your amounts, merchants, categories, notes or receipts, and it is not used to track you. Google processes the reports for the developer and keeps them for 90 days. Google&rsquo;s <a href="https://firebase.google.com/support/privacy">Firebase privacy information</a> applies.</li>
 </ul>
 
 <h2 id="network-use">Network use</h2>
-<p>Kept itself does not call any server run by the developer or by a third party. Data leaves your iPhone only through Apple&rsquo;s services: iCloud (if you turn sync on), the App Store (purchases and Restore Purchases) and the iOS share sheet and Mail when you use them. Links in the app open this website, which is hosted on GitHub Pages.</p>
+<p>Kept does not call any server run by the developer. Your data leaves your iPhone only through Apple&rsquo;s services: iCloud (if you turn sync on), the App Store (purchases and Restore Purchases) and the iOS share sheet and Mail when you use them. The one other connection is to Google&rsquo;s Firebase Crashlytics, which receives the crash reports described above. Links in the app open this website, which is hosted on GitHub Pages.</p>
 
 <h2 id="what-the-developer-does-not-do">What the developer does not do</h2>
 <ul>
 <li>Does not collect, receive, sell or share your personal data.</li>
-<li>Does not use analytics, crash reporting or advertising SDKs.</li>
+<li>Does not use analytics or advertising SDKs. The only third-party code in Kept is the crash reporter.</li>
 <li>Does not track you across apps or websites.</li>
 <li>Does not run a backend that stores your information.</li>
 </ul>
