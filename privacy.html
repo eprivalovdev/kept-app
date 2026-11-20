@@ -48,6 +48,7 @@
 <div class="wrap doc-body">
 <nav class="toc" aria-label="On this page"><p>On this page</p><ol>
 <li><a href="#what-kept-stores-and-where">What Kept stores, and where</a></li>
+<li><a href="#anonymous-usage-statistics">Anonymous usage statistics</a></li>
 <li><a href="#network-use">Network use</a></li>
 <li><a href="#what-the-developer-does-not-do">What the developer does not do</a></li>
 <li><a href="#export-and-deletion">Export and deletion</a></li>
@@ -57,7 +58,7 @@
 <li><a href="#contact">Contact</a></li>
 </ol></nav>
 <article class="doc">
-<p><strong>Short version:</strong> Kept collects nothing about you or your money. It has no account, no servers of its own, no analytics, no ads and no tracking. Your data stays on your iPhone. If you turn on iCloud sync, it also goes to your own private iCloud. The one thing the developer receives is an anonymous crash report when the app fails.</p>
+<p><strong>Short version:</strong> Kept collects nothing about your money and nothing that identifies you. It has no account, no servers of its own, no ads and no tracking. Your expenses stay on your iPhone. If you turn on iCloud sync, they also go to your own private iCloud. The developer receives two anonymous things: crash reports when the app fails, and usage statistics such as which screens are opened. Neither ever contains your amounts, merchants, categories, notes or anything else you typed.</p>
 
 <h2 id="what-kept-stores-and-where">What Kept stores, and where</h2>
 <ul>
@@ -74,13 +75,21 @@
 <li><strong>Crash reports.</strong> If Kept crashes, it sends a crash report through Firebase Crashlytics, a Google service, the next time you open it. The report holds the place in the code where the app failed, your iPhone model, the iOS and Kept versions, the time of the crash and a random identifier of this installation. It does not hold your name, your Apple Account, your amounts, merchants, categories, notes or receipts, and it is not used to track you. Google processes the reports for the developer and keeps them for 90 days. Google&rsquo;s <a href="https://firebase.google.com/support/privacy">Firebase privacy information</a> applies.</li>
 </ul>
 
+<h2 id="anonymous-usage-statistics">Anonymous usage statistics</h2>
+<p>Kept uses Google Analytics for Firebase, a Google service, to learn how the app is used so it can be improved: for example, which screens are opened, which steps of the setup are finished, whether a payment was added by the Wallet automation or by hand, and how people use the Kept Pro screen (where it was opened from, which plan was picked, whether it was bought or closed).</p>
+<ul>
+<li><strong>What is sent.</strong> The name of the event and a few fixed labels, such as &ldquo;settings&rdquo;, &ldquo;yearly&rdquo; or &ldquo;1-10 payments&rdquo;; a random identifier of this installation that resets if you reinstall Kept; your iPhone model, iOS and Kept versions, language and country. If you buy Kept Pro, Firebase may also record that purchase (the plan and its price), as it does for apps that use it.</li>
+<li><strong>What is never sent.</strong> Your amounts, currency, merchants, category names, notes, dates of payments, receipts, the names of people you split with, your name, your Apple Account or contacts. Kept does not set a user identifier, does not use the advertising identifier and does not track you across apps or websites, so it never asks for tracking permission.</li>
+<li><strong>Who processes it.</strong> Google processes the statistics for the developer. Google signals and advertising features are turned off, and Google keeps the detailed data for 14 months. Google&rsquo;s <a href="https://firebase.google.com/support/privacy">Firebase privacy information</a> applies.</li>
+</ul>
+
 <h2 id="network-use">Network use</h2>
-<p>Kept does not call any server run by the developer. Your data leaves your iPhone only through Apple&rsquo;s services: iCloud (if you turn sync on), the App Store (purchases and Restore Purchases) and the iOS share sheet and Mail when you use them. The one other connection is to Google&rsquo;s Firebase Crashlytics, which receives the crash reports described above. Links in the app open this website, which is hosted on GitHub Pages.</p>
+<p>Kept does not call any server run by the developer. Your data leaves your iPhone only through Apple&rsquo;s services: iCloud (if you turn sync on), the App Store (purchases and Restore Purchases) and the iOS share sheet and Mail when you use them. The other connection is to Google&rsquo;s Firebase, which receives the crash reports and the anonymous usage statistics described above. Links in the app open this website, which is hosted on GitHub Pages.</p>
 
 <h2 id="what-the-developer-does-not-do">What the developer does not do</h2>
 <ul>
 <li>Does not collect, receive, sell or share your personal data.</li>
-<li>Does not use analytics or advertising SDKs. The only third-party code in Kept is the crash reporter.</li>
+<li>Does not use advertising SDKs. The only third-party code in Kept is Google&rsquo;s Firebase, for crash reports and anonymous usage statistics.</li>
 <li>Does not track you across apps or websites.</li>
 <li>Does not run a backend that stores your information.</li>
 </ul>
